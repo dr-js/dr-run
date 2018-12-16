@@ -1,0 +1,41 @@
+{
+  "private": true,
+  "name": "dr-run",
+  "version": "0.0.0",
+  "description": "Server source for dr.run",
+  "author": "dr-js",
+  "license": "MIT",
+  "keywords": [
+    "Dr",
+    "Dr-js",
+    "JavaScript"
+  ],
+  "repository": "github:dr-js/dr-run",
+  "bin": "bin/index.js",
+  "scripts": {
+    "// script ======================": "",
+    "script-base": "babel-node ./script quiet",
+    "script-pack": "babel-node ./script quiet pack",
+    "script-publish": "babel-node ./script pack publish",
+    "script-publish-dev": "babel-node ./script pack publish-dev",
+    "script-generate-spec": "cross-env BABEL_ENV=build-bin babel-node ./script/generateSpec",
+    "// build =======================": "",
+    "build-library": "babel-node ./script/webpack production profile",
+    "build-library-dev": "babel-node ./script/webpack development watch",
+    "// =============================": "",
+    "analyze-stat": "npx webpack-bundle-analyzer .temp-gitignore/profile-stat.json",
+    "prepack": "echo \"Error: pack with script-*\" && exit 1"
+  },
+  "engines": {
+    "node": ">=10",
+    "npm": ">=6"
+  },
+  "devDependencies": {
+    "dr-dev": "0.0.0",
+    "dr-dev-web": "0.0.0",
+    "dr-js": "0.18.2",
+    "dr-server": "0.0.28",
+    "highlight.js": "9.13.1",
+    "marked": "0.5.2"
+  }
+}
