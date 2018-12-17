@@ -25,8 +25,9 @@ runMain(async (logger) => {
 
   const packageJSON = await initOutput({ fromRoot, fromOutput, copyPathList: [ 'README.md' ], logger })
 
-  padLog(`copy bin`)
+  padLog(`copy bin & Dr.browser.js`)
   await modify.copy(fromRoot('source-bin/index.js'), fromOutput('bin/index.js'))
+  await modify.copy(fromRoot('node_modules/dr-js/library/Dr.browser.js'), fromOutput('library/Dr.browser.js'))
 
   if (!argvFlag('pack')) return
 

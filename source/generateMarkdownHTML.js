@@ -109,10 +109,10 @@ const generateMarkdownHTML = async (rootPath) => {
   await writeFileAsync(
     resolve(rootPath, 'file/[PUBLIC]/index.html'),
     COMMON_LAYOUT([
-      `<title>DR-RUN-WEBLOG</title>`,
+      `<title>Dr.Weblog</title>`,
       markdownStyleString
     ], [
-      `<h1>DR-RUN-WEBLOG</h1>`,
+      `<h1>Dr.Weblog</h1>`,
       ...indexTagList
         .sort((a, b) => compareString(b.date, a.date))
         .map((v) => v.indexTagString),

@@ -24,10 +24,8 @@
 >       set to enable
 >   --version -v [OPTIONAL] [ARGUMENT=0+]
 >       set to enable
->   --debug [OPTIONAL] [ARGUMENT=0+]
->       more log for debugging
 >   --generate-markdown -G [OPTIONAL] [ARGUMENT=1]
->       load Markdown and generate server WebLog & index
+>       expect root-path, load Markdown and generate server Weblog & index
 >   --hostname -H [OPTIONAL] [ARGUMENT=1]
 >     --port -P [OPTIONAL-CHECK] [ARGUMENT=1]
 >     --https -S [OPTIONAL-CHECK] [ARGUMENT=0+]
@@ -60,7 +58,6 @@
 >     export DR_RUN_CONFIG="[OPTIONAL] [ARGUMENT=1]"
 >     export DR_RUN_HELP="[OPTIONAL] [ARGUMENT=0+]"
 >     export DR_RUN_VERSION="[OPTIONAL] [ARGUMENT=0+]"
->     export DR_RUN_DEBUG="[OPTIONAL] [ARGUMENT=0+]"
 >     export DR_RUN_GENERATE_MARKDOWN="[OPTIONAL] [ARGUMENT=1]"
 >     export DR_RUN_HOSTNAME="[OPTIONAL] [ARGUMENT=1]"
 >     export DR_RUN_PORT="[OPTIONAL-CHECK] [ARGUMENT=1]"
@@ -90,7 +87,6 @@
 >     "config": [ "[OPTIONAL] [ARGUMENT=1]" ],
 >     "help": [ "[OPTIONAL] [ARGUMENT=0+]" ],
 >     "version": [ "[OPTIONAL] [ARGUMENT=0+]" ],
->     "debug": [ "[OPTIONAL] [ARGUMENT=0+]" ],
 >     "generateMarkdown": [ "[OPTIONAL] [ARGUMENT=1]" ],
 >     "hostname": [ "[OPTIONAL] [ARGUMENT=1]" ],
 >     "port": [ "[OPTIONAL-CHECK] [ARGUMENT=1]" ],

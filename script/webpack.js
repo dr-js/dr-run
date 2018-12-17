@@ -26,6 +26,7 @@ runMain(async (logger) => {
   const config = {
     mode,
     bail: isProduction,
+    node: false, // no node mock
     target: 'node', // support node main modules like 'fs'
     output: { path: fromOutput('library'), filename: '[name].js' },
     entry: { index: 'source/index' },
