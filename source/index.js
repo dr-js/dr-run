@@ -12,18 +12,19 @@ import { configureResponder } from './configureResponder'
 import { name as packageName, version as packageVersion } from '../package.json'
 
 const loadSNISSL = async (SNISSLConfig, SNIConfig = {}) => {
+  const fromSNISSLConfig = (path) => resolve(SNISSLConfig, '..', path)
   for (const [ hostname, { key, cert, chain } ] of Object.entries(JSON.parse(await readFileAsync(SNISSLConfig)))) {
     SNIConfig[ hostname ] = {
-      fileSSLKey: resolve(SNISSLConfig, key),
-      fileSSLCert: resolve(SNISSLConfig, cert),
-      fileSSLChain: resolve(SNISSLConfig, chain)
+      fileSSLKey: fromSNISSLConfig(key),
+      fileSSLCert: fromSNISSLConfig(cert),
+      fileSSLChain: fromSNISSLConfig(chain)
     }
   }
   return getServerSNIOption(SNIConfig)
 }
 
 const startServer = async ({ getOptionOptional, getSingleOption, getSingleOptionOptional }) => {
-  const SNISSLConfig = getOptionOptional('sni-ssl-config')
+  const SNISSLConfig = getSingleOptionOptional('sni-ssl-config')
 
   await configureFilePid({
     filePid: getSingleOptionOptional('pid-file'),
