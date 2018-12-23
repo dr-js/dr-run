@@ -16,7 +16,8 @@ const REGEXP_DATE = /\d\d\d\d\/\d\d\/\d\d/
 
 const markdownStyleString = `<style>
 body { 
-  margin: 0 auto; 
+  margin: 0 auto;
+  padding: 0 8px;
   max-width: 640px; 
   background: #f5f5f5; 
   word-break: break-word; 
@@ -25,7 +26,7 @@ body {
 pre, code { 
   overflow: auto; 
   background: rgba(0, 0, 0, 0.05); 
-  font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace; 
+  font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;
 }
 pre code { background: none; }
 blockquote { border-left: 0.5em solid rgba(0, 0, 0, 0.2); }

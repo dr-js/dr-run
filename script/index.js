@@ -10,6 +10,7 @@ import { getScriptFileListFromPathList } from 'dr-dev/module/fileList'
 import { initOutput, packOutput, verifyOutputBinVersion, publishOutput } from 'dr-dev/module/commonOutput'
 import { processFileList, fileProcessorWebpack } from 'dr-dev/module/fileProcessor'
 import { getTerserOption, minifyFileListWithTerser } from 'dr-dev/module/minify'
+import { writeLicenseFile } from 'dr-dev/module/license'
 
 const PATH_ROOT = resolve(__dirname, '..')
 const PATH_OUTPUT = resolve(__dirname, '../output-gitignore')
@@ -24,6 +25,7 @@ runMain(async (logger) => {
   execSync(`npm run script-generate-spec`, execOptionRoot)
 
   const packageJSON = await initOutput({ fromRoot, fromOutput, copyPathList: [ 'README.md' ], logger })
+  writeLicenseFile(fromRoot('LICENSE'), packageJSON.license, packageJSON.author)
 
   padLog(`copy bin & Dr.browser.js`)
   await modify.copy(fromRoot('source-bin/index.js'), fromOutput('bin/index.js'))
