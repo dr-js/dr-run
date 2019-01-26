@@ -1,30 +1,33 @@
-import { ConfigPresetNode, prepareOption } from 'dr-js/module/node/module/Option'
-import { getServerFormatConfig, AuthFormatConfig, AuthGroupFormatConfig } from 'dr-server/module/option'
+import { Preset, prepareOption } from 'dr-js/module/node/module/Option/preset'
+import { getServerFormatConfig, LogFormatConfig, PidFormatConfig, AuthFormatConfig, AuthGroupFormatConfig } from 'dr-server/module/configure/option'
 
-const { SinglePath, BooleanFlag, Config } = ConfigPresetNode
+const { Config, parseCompact, parseCompactList } = Preset
+
+const MODE_FORMAT_LIST = [
+  getServerFormatConfig([
+    LogFormatConfig,
+    PidFormatConfig,
+    AuthFormatConfig,
+    AuthGroupFormatConfig,
+    parseCompact('root-path/SP|directory to use as server root'),
+    parseCompact('sni-ssl-config/SP,O|SNI SSL JSON { [hostname]: { key, cert, chain } }')
+  ]),
+  parseCompact('generate-markdown,G/SP,O|expect root-path, load Markdown and generate server Weblog & index')
+]
+const MODE_NAME_LIST = MODE_FORMAT_LIST.map(({ name }) => name)
 
 const OPTION_CONFIG = {
   prefixENV: 'dr-run',
   formatList: [
     Config,
-    { ...BooleanFlag, name: 'help', shortName: 'h' },
-    { ...BooleanFlag, name: 'version', shortName: 'v' },
-    {
-      ...SinglePath,
-      optional: true,
-      name: 'generate-markdown',
-      shortName: 'G',
-      description: 'expect root-path, load Markdown and generate server Weblog & index'
-    },
-    getServerFormatConfig([
-      AuthFormatConfig,
-      AuthGroupFormatConfig,
-      { ...SinglePath, name: 'root-path' },
-      { ...SinglePath, optional: true, name: 'sni-ssl-config', description: 'SNI SSL JSON { [hostname]: { key, cert, chain } }' }
-    ])
+    ...parseCompactList(
+      'help,h/T|show full help',
+      'version,v/T|show version'
+    ),
+    ...MODE_FORMAT_LIST
   ]
 }
 
 const { parseOption, formatUsage } = prepareOption(OPTION_CONFIG)
 
-export { parseOption, formatUsage }
+export { MODE_NAME_LIST, parseOption, formatUsage }

@@ -34,7 +34,7 @@ const configureResponder = async ({
   const URL_AUTH_CHECK = '/a'
   const URL_INDEX = `${URL_STATIC}/index.html`
 
-  const { wrapResponderCheckAuthCheckCode } = fileAuth
+  const { createResponderCheckAuth } = fileAuth
     ? await configureAuthTimedLookup({ fileAuth, shouldAuthGen, authGenTag, authGenSize, authGenTokenSize, authGenTimeGap, logger })
     : await configureAuthTimedLookupGroup({
       pathAuthDirectory: pathAuthGroup,
@@ -49,7 +49,7 @@ const configureResponder = async ({
     explorerRootPath: PATH_EXPLORER,
     explorerUploadMergePath: PATH_EXPLORER_UPLOAD_MERGE,
     urlAuthCheck: URL_AUTH_CHECK,
-    wrapResponderCheckAuthCheckCode
+    createResponderCheckAuth
   })
 
   const featureTaskRunner = await configureFeaturePackTaskRunner({
@@ -58,7 +58,7 @@ const configureResponder = async ({
     routePrefix: '',
     taskRunnerRootPath: PATH_TASK_RUNNER,
     urlAuthCheck: URL_AUTH_CHECK,
-    wrapResponderCheckAuthCheckCode
+    createResponderCheckAuth
   })
 
   const responderLogEnd = createResponderLogEnd({ log: logger.add })
@@ -70,7 +70,7 @@ const configureResponder = async ({
   const routeMap = createRouteMap([
     ...featureExplorer.routeList,
     ...featureTaskRunner.routeList,
-    [ URL_AUTH_CHECK, 'GET', wrapResponderCheckAuthCheckCode((store) => responderEndWithStatusCode(store, { statusCode: 200 })) ],
+    [ URL_AUTH_CHECK, 'GET', createResponderCheckAuth({ responderNext: (store) => responderEndWithStatusCode(store, { statusCode: 200 }) }) ],
     [ `${URL_STATIC}/*`, 'GET', (store) => responderServeStatic(store, getParamFilePath(store)) ],
     [ '/', 'GET', (store) => responderEndWithRedirect(store, { redirectUrl: URL_INDEX }) ],
     [ [ '/favicon', '/favicon.ico' ], 'GET', createResponderFavicon() ]

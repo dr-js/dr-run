@@ -2,13 +2,14 @@ import { resolve } from 'path'
 
 import { readFileAsync } from 'dr-js/module/node/file/function'
 
-import { configureLogger } from 'dr-server/module/configure/logger'
-import { configureFilePid } from 'dr-server/module/configure/filePid'
-import { configureServerBase, getServerSNIOption } from 'dr-server/module/configure/serverBase'
+import { configureLog } from 'dr-server/module/configure/log'
+import { configurePid } from 'dr-server/module/configure/pid'
+import { configureServer, getServerSNIOption } from 'dr-server/module/configure/server'
+import { getServerOption, getLogOption, getPidOption, getAuthOption, getAuthGroupOption } from 'dr-server/module/configure/option'
 
-import { parseOption, formatUsage } from './option'
-import { generateMarkdownHTML } from './generateMarkdownHTML'
+import { generateMarkdownHTML } from './markdown/generateMarkdownHTML'
 import { configureResponder } from './configureResponder'
+import { MODE_NAME_LIST, parseOption, formatUsage } from './option'
 import { name as packageName, version as packageVersion } from '../package.json'
 
 const loadSNISSL = async (SNISSLConfig, SNIConfig = {}) => {
@@ -23,68 +24,52 @@ const loadSNISSL = async (SNISSLConfig, SNIConfig = {}) => {
   return getServerSNIOption(SNIConfig)
 }
 
-const startServer = async ({ getOptionOptional, getSingleOption, getSingleOptionOptional }) => {
-  const SNISSLConfig = getSingleOptionOptional('sni-ssl-config')
+const startServer = async (optionData) => {
+  const { getFirst, tryGetFirst } = optionData
+  const SNISSLConfig = tryGetFirst('sni-ssl-config')
 
-  await configureFilePid({
-    filePid: getSingleOptionOptional('pid-file'),
-    shouldIgnoreExistPid: getOptionOptional('pid-ignore-exist')
-  })
+  await configurePid(getPidOption(optionData))
 
-  const { server, start, option } = await configureServerBase({
-    hostname: getSingleOptionOptional('hostname'),
-    port: getSingleOptionOptional('port'),
-    protocol: getOptionOptional('https') ? 'https:' : 'http:',
-    fileSSLKey: getSingleOptionOptional('file-SSL-key'),
-    fileSSLCert: getSingleOptionOptional('file-SSL-cert'),
-    fileSSLChain: getSingleOptionOptional('file-SSL-chain'),
-    fileSSLDHParam: getSingleOptionOptional('file-SSL-dhparam'),
+  const { server, start, option } = await configureServer({
+    ...getServerOption(optionData),
     ...(SNISSLConfig ? await loadSNISSL(SNISSLConfig) : {})
   })
 
-  const logger = await configureLogger({
-    pathLogDirectory: getSingleOptionOptional('log-path'),
-    logFilePrefix: getSingleOptionOptional('log-file-prefix') || '[dr-run]'
-  })
+  const logger = await configureLog(getLogOption(optionData))
 
   await configureResponder({
-    fileAuth: getSingleOptionOptional('auth-file'),
-    shouldAuthGen: Boolean(getOptionOptional('auth-gen')),
-    authGenTag: getSingleOptionOptional('auth-gen-tag'),
-    authGenSize: getSingleOptionOptional('auth-gen-size'),
-    authGenTokenSize: getSingleOptionOptional('auth-gen-token-size'),
-    authGenTimeGap: getSingleOptionOptional('auth-gen-time-gap'),
-
-    pathAuthGroup: getSingleOptionOptional('auth-group-path'),
-    authGroupDefaultTag: getSingleOptionOptional('auth-group-default-tag'),
-    authGroupKeySuffix: getSingleOptionOptional('auth-group-key-suffix'),
-
-    rootPath: getSingleOption('root-path')
+    ...getAuthOption(optionData),
+    ...getAuthGroupOption(optionData),
+    rootPath: getFirst('root-path')
   }, { server, option, logger })
 
   await start()
   logger.add(`[SERVER UP] version: ${packageVersion}, pid: ${process.pid}, at: ${option.baseUrl}`)
 }
 
+const runMode = async (modeName, optionData) => {
+  switch (modeName) {
+    case 'host':
+      return startServer(optionData)
+    case 'generate-markdown':
+      return generateMarkdownHTML(optionData.getFirst('generate-markdown'))
+  }
+}
+
 const main = async () => {
   const optionData = await parseOption()
+  const modeName = MODE_NAME_LIST.find((name) => optionData.tryGet(name))
 
-  if (optionData.getSingleOptionOptional('generate-markdown')) {
-    return generateMarkdownHTML(optionData.getSingleOption('generate-markdown')).catch((error) => {
-      console.warn(`[Error]`, error.stack || error)
-      process.exit(2)
-    })
-  } else if (optionData.getSingleOptionOptional('hostname')) {
-    return startServer(optionData).catch((error) => {
-      console.warn(`[Error]`, error.stack || error)
-      process.exit(2)
-    })
-  } else {
-    return optionData.getOptionOptional('version')
+  if (!modeName) {
+    return optionData.tryGet('version')
       ? console.log(JSON.stringify({ packageName, packageVersion }, null, '  '))
-      : console.log(formatUsage(null, optionData.getOptionOptional('help') ? null : 'simple'))
+      : console.log(formatUsage(null, optionData.tryGet('help') ? null : 'simple'))
   }
 
+  await runMode(modeName, optionData).catch((error) => {
+    console.warn(`[Error] in mode: ${modeName}:`, error.stack || error)
+    process.exit(2)
+  })
 }
 
 main().catch((error) => {

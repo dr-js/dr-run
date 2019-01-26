@@ -7,7 +7,7 @@ import { getFileList } from 'dr-js/module/node/file/Directory'
 
 import { getMarkdownHeaderLink } from 'dr-dev/module/ExportIndex/renderMarkdown'
 
-import { Marked, highlightStyleString } from './generateMarkdown'
+import { Marked, highlightStyleString } from './Marked'
 
 const joinText = (...args) => args.filter(Boolean).join('\n')
 const trimTitle = (string) => string.replace(/[^\w ()`/-]/g, '').trim()
@@ -37,41 +37,32 @@ const generateMarkdown = async (file) => {
   const markdownString = String(await readFileAsync(file))
 
   const tokenData = Marked.lexer(markdownString)
-  const [ markdownTitleToken, markdownDateToken, ...markdownTokenList ] = tokenData
-  __DEV__ && console.log({ markdownTitleToken, markdownDateToken, links: tokenData.links })
-  if (
-    markdownTitleToken.type !== 'heading' ||
-    markdownTitleToken.depth !== 1 ||
-    !markdownTitleToken.text.trim()
-  ) throw new Error(`[generateMarkdown] expect first line to be "# title"`)
-  if (
-    markdownDateToken.type !== 'heading' ||
-    markdownDateToken.depth !== 6 ||
-    !REGEXP_DATE.test(markdownDateToken.text.trim())
-  ) throw new Error(`[generateMarkdown] expect second line to be "###### YYYY/MM/DD"`)
+  const title = trimTitle(tokenData.links[ 'meta:title' ].title)
+  const date = trimTitle(tokenData.links[ 'meta:date' ].title)
 
-  const title = trimTitle(markdownTitleToken.text)
-  const date = markdownDateToken.text.trim()
-  const headerLink = markdownTokenList
+  if (!title) throw new Error(`[generateMarkdown] expect meta link: [meta:title]: # "Title here"`)
+  if (!REGEXP_DATE.test(date)) throw new Error(`[generateMarkdown] expect meta link: [meta:date]: # "yyyy/mm/dd"`)
+
+  const headerLink = tokenData
     .filter((v) => v.type === 'heading')
     .map(v => `* ${getMarkdownHeaderLink(v.text)}`)
     .join('\n')
 
-  const markdownFileName = `${basename(file, extname(file))}.html`
-  // const markdownFileName = `${basename(file, extname(file))}-${generateHash(markdownString)}.html`
+  const markdownFileName = `${basename(file, extname(file))}.html` // `${basename(file, extname(file))}-${generateHash(markdownString)}.html`
   const markdownHTMLString = COMMON_LAYOUT([
     `<title>${title}</title>`,
     markdownStyleString,
-    markdownTokenList.find(({ type }) => type === 'code') ? highlightStyleString : ''
+    tokenData.find(({ type }) => type === 'code') ? highlightStyleString : ''
   ], [
-    Marked.parser(Object.assign([ markdownTitleToken, markdownDateToken ], { links: tokenData.links })),
+    Marked(`# ${title}`),
+    Marked(`###### ${date}`),
     Marked(headerLink),
-    Marked.parser(Object.assign(markdownTokenList, { links: tokenData.links }))
+    Marked.parser(Object.assign(tokenData, { links: tokenData.links }))
   ])
 
   const indexTagString = joinText(
     `<p>`,
-    `📄`,
+    `<a href="${encodeURI(toPosixPath(join('t', basename(file))))}" title="get source markdown">📄</a>`,
     `<a href="${encodeURI(toPosixPath(join('t', markdownFileName)))}">${title}</a>`,
     `[${date}]`,
     `</p>`
