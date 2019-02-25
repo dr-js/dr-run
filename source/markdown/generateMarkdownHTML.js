@@ -19,13 +19,14 @@ body {
   margin: 0 auto;
   padding: 0 8px;
   max-width: 640px; 
-  background: #f5f5f5; 
-  word-break: break-word; 
-  font-family: Segoe UI,Open Sans,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei,WenQuanYi Micro Hei,sans-serif; 
+  background: #f9f9f9;
+  word-break: break-word;
+  font-family: Segoe UI,Open Sans,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei,WenQuanYi Micro Hei,sans-serif;
 }
-pre, code { 
-  overflow: auto; 
-  background: rgba(0, 0, 0, 0.05); 
+a { color: #00d; }
+pre, code {
+  overflow: auto;
+  background: rgba(0, 0, 0, 0.05);
   font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;
 }
 pre code { background: none; }
