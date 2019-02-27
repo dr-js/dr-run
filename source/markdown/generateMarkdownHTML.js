@@ -5,7 +5,7 @@ import { COMMON_LAYOUT } from 'dr-js/module/node/server/commonHTML'
 import { readFileAsync, writeFileAsync, toPosixPath } from 'dr-js/module/node/file/function'
 import { getFileList } from 'dr-js/module/node/file/Directory'
 
-import { getMarkdownHeaderLink } from 'dr-dev/module/ExportIndex/renderMarkdown'
+import { getMarkdownHeaderLink } from 'dr-dev/module/node/export/renderMarkdown'
 
 import { Marked, highlightStyleString } from './Marked'
 
@@ -19,11 +19,10 @@ body {
   margin: 0 auto;
   padding: 0 8px;
   max-width: 640px; 
-  background: #f9f9f9;
   word-break: break-word;
   font-family: Segoe UI,Open Sans,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei,WenQuanYi Micro Hei,sans-serif;
 }
-a { color: #00d; }
+a { color: #06d; }
 pre, code {
   overflow: auto;
   background: rgba(0, 0, 0, 0.05);
