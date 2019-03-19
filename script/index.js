@@ -28,7 +28,7 @@ runMain(async (logger) => {
 
   padLog(`copy bin & Dr.browser.js`)
   await modify.copy(fromRoot('source-bin/index.js'), fromOutput('bin/index.js'))
-  await modify.copy(fromRoot('node_modules/dr-js/library/Dr.browser.js'), fromOutput('library/Dr.browser.js'))
+  await modify.copy(fromRoot('node_modules/dr-js/library/Dr.browser.js'), fromOutput('library/Dr.browser.js')) // TODO: NOTE: for `getDrBrowserScriptHTML()` from `dr-server`
 
   if (!argvFlag('pack')) return
 
