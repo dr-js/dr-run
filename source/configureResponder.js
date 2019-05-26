@@ -5,12 +5,12 @@ import { BASIC_EXTENSION_MAP } from 'dr-js/module/common/module/MIME'
 import { createPathPrefixLock } from 'dr-js/module/node/file/function'
 import { createDirectory } from 'dr-js/module/node/file/File'
 import { createRequestListener } from 'dr-js/module/node/server/Server'
-import { responderEnd, responderEndWithStatusCode, responderEndWithRedirect, createResponderLog, createResponderLogEnd } from 'dr-js/module/node/server/Responder/Common'
+import { responderEnd, responderEndWithRedirect, createResponderLog, createResponderLogEnd } from 'dr-js/module/node/server/Responder/Common'
 import { prepareBufferData, responderSendBufferCompress } from 'dr-js/module/node/server/Responder/Send'
 import { createResponderRouter, createRouteMap, getRouteParamAny } from 'dr-js/module/node/server/Responder/Router'
 import { createResponderServeStatic } from 'dr-js/module/node/server/Responder/ServeStatic'
 
-import { configureAuthTimedLookup, configureAuthTimedLookupGroup } from 'dr-server/module/configure/auth'
+import { configureFeaturePack as configureFeaturePackAuth } from 'dr-server/module/feature/Auth/configureFeaturePack'
 import { configureFeaturePack as configureFeaturePackExplorer } from 'dr-server/module/feature/Explorer/configureFeaturePack'
 import { configureFeaturePack as configureFeaturePackTaskRunner } from 'dr-server/module/feature/TaskRunner/configureFeaturePack'
 
@@ -18,10 +18,12 @@ const PUBLIC_CACHE_FILE_SIZE_MAX = 1024 * 1024 // in byte, 1MB
 const PUBLIC_CACHE_EXPIRE_TIME = 5 * 60 * 1000 // 5min, in msec
 
 const configureResponder = async ({
-  fileAuth, shouldAuthGen, authGenTag, authGenSize, authGenTokenSize, authGenTimeGap,
-  pathAuthGroup, authGroupDefaultTag, authGroupKeySuffix,
+  authSkip,
+  authFile, authFileGenTag, authFileGenSize, authFileGenTokenSize, authFileGenTimeGap,
+  authFileGroupPath, authFileGroupDefaultTag, authFileGroupKeySuffix,
 
-  rootPath
+  rootPath,
+  routePrefix = ''
 }, { server, option, logger }) => {
   const PATH_EXPLORER = rootPath
   const PATH_EXPLORER_UPLOAD_MERGE = resolve(rootPath, 'file/[UPLOAD]/')
@@ -30,35 +32,27 @@ const configureResponder = async ({
 
   await createDirectory(PATH_PUBLIC)
 
-  const URL_STATIC = '/s' // relative to PATH_PUBLIC
   const URL_AUTH_CHECK = '/a'
+  const URL_STATIC = '/s' // relative to PATH_PUBLIC
   const URL_INDEX = `${URL_STATIC}/index.html`
 
-  const { createResponderCheckAuth } = fileAuth
-    ? await configureAuthTimedLookup({ fileAuth, shouldAuthGen, authGenTag, authGenSize, authGenTokenSize, authGenTimeGap, logger })
-    : await configureAuthTimedLookupGroup({
-      pathAuthDirectory: pathAuthGroup,
-      getFileNameForTag: authGroupKeySuffix ? (tag) => `${tag}${authGroupKeySuffix}` : undefined,
-      logger
-    })
+  const featureAuth = await configureFeaturePackAuth({
+    ...{ option, logger, routePrefix },
+    ...{ authSkip },
+    ...{ authFile, authFileGenTag, authFileGenSize, authFileGenTokenSize, authFileGenTimeGap },
+    ...{ authFileGroupPath, authFileGroupDefaultTag, authFileGroupKeySuffix },
+    URL_AUTH_CHECK
+  })
 
   const featureExplorer = await configureFeaturePackExplorer({
-    option,
-    logger,
-    routePrefix: '',
+    ...{ option, logger, routePrefix, featureAuth },
     explorerRootPath: PATH_EXPLORER,
-    explorerUploadMergePath: PATH_EXPLORER_UPLOAD_MERGE,
-    urlAuthCheck: URL_AUTH_CHECK,
-    createResponderCheckAuth
+    explorerUploadMergePath: PATH_EXPLORER_UPLOAD_MERGE
   })
 
   const featureTaskRunner = await configureFeaturePackTaskRunner({
-    option,
-    logger,
-    routePrefix: '',
-    taskRunnerRootPath: PATH_TASK_RUNNER,
-    urlAuthCheck: URL_AUTH_CHECK,
-    createResponderCheckAuth
+    ...{ option, logger, routePrefix, featureAuth },
+    taskRunnerRootPath: PATH_TASK_RUNNER
   })
 
   const responderLogEnd = createResponderLogEnd({ log: logger.add })
@@ -68,9 +62,9 @@ const configureResponder = async ({
   const responderServeStatic = createResponderServeStatic({ sizeSingleMax: PUBLIC_CACHE_FILE_SIZE_MAX, expireTime: PUBLIC_CACHE_EXPIRE_TIME })
 
   const routeMap = createRouteMap([
+    ...featureAuth.routeList,
     ...featureExplorer.routeList,
     ...featureTaskRunner.routeList,
-    [ URL_AUTH_CHECK, 'GET', createResponderCheckAuth({ responderNext: (store) => responderEndWithStatusCode(store, { statusCode: 200 }) }) ],
     [ `${URL_STATIC}/*`, 'GET', (store) => responderServeStatic(store, getParamFilePath(store)) ],
     [ '/', 'GET', (store) => responderEndWithRedirect(store, { redirectUrl: URL_INDEX }) ],
     [ [ '/favicon', '/favicon.ico' ], 'GET', createResponderFavicon() ]

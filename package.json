@@ -1,20 +1,14 @@
 {
   "private": true,
   "name": "dr-run",
-  "version": "0.0.4-dev.1",
+  "version": "0.0.4-dev.2",
   "description": "Server source for dr.run",
   "author": "dr-js",
   "license": "MIT",
-  "keywords": [
-    "Dr",
-    "Dr-js",
-    "JavaScript"
-  ],
   "repository": "github:dr-js/dr-run",
   "bin": "bin/index.js",
   "scripts": {
     "// script ======================": "",
-    "script-base": "babel-node ./script quiet",
     "script-pack": "babel-node ./script quiet pack",
     "script-publish": "babel-node ./script pack publish",
     "script-publish-dev": "babel-node ./script pack publish-dev",
@@ -24,6 +18,7 @@
     "build-library-dev": "babel-node ./script/webpack development watch",
     "// =============================": "",
     "analyze-stat": "npx webpack-bundle-analyzer .temp-gitignore/profile-stat.json",
+    "lint": "eslint ./source/ ./source-bin/ ./script/",
     "prepack": "echo \"Error: pack with script-*\" && exit 1"
   },
   "engines": {
@@ -31,11 +26,11 @@
     "npm": ">=6"
   },
   "devDependencies": {
-    "dr-dev": "0.0.6-dev.0",
-    "dr-dev-web": "0.0.6-dev.0",
-    "dr-js": "0.21.1-dev.1",
-    "dr-server": "0.0.34-dev.1",
-    "highlight.js": "^9.15.6",
-    "marked": "^0.6.2"
+    "dr-dev": "0.0.6-dev.8",
+    "dr-dev-web": "0.0.6-dev.8",
+    "dr-js": "0.22.2-dev.0",
+    "dr-server": "0.2.0-dev.1",
+    "highlight.js": "^9.15.8",
+    "marked": "^0.7.0"
   }
 }

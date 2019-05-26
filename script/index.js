@@ -2,14 +2,12 @@ import { resolve } from 'path'
 import { execSync } from 'child_process'
 
 import { binary } from 'dr-js/module/common/format'
-import { modify } from 'dr-js/module/node/file/Modify'
 
 import { getScriptFileListFromPathList } from 'dr-dev/module/node/fileList'
 import { runMain, argvFlag } from 'dr-dev/module/main'
 import { initOutput, packOutput, verifyOutputBinVersion, publishOutput } from 'dr-dev/module/output'
 import { processFileList, fileProcessorWebpack } from 'dr-dev/module/fileProcessor'
 import { getTerserOption, minifyFileListWithTerser } from 'dr-dev/module/minify'
-import { writeLicenseFile } from 'dr-dev/module/license'
 
 const PATH_ROOT = resolve(__dirname, '..')
 const PATH_OUTPUT = resolve(__dirname, '../output-gitignore')
@@ -23,14 +21,19 @@ runMain(async (logger) => {
   padLog('generate spec')
   execSync(`npm run script-generate-spec`, execOptionRoot)
 
-  const packageJSON = await initOutput({ fromRoot, fromOutput, copyPathList: [ 'README.md' ], logger })
-  writeLicenseFile(fromRoot('LICENSE'), packageJSON.license, packageJSON.author)
-
-  padLog(`copy bin & Dr.browser.js`)
-  await modify.copy(fromRoot('source-bin/index.js'), fromOutput('bin/index.js'))
-  await modify.copy(fromRoot('node_modules/dr-js/library/Dr.browser.js'), fromOutput('library/Dr.browser.js')) // TODO: NOTE: for `getDrBrowserScriptHTML()` from `dr-server`
+  const packageJSON = await initOutput({
+    copyMapPathList: [
+      [ 'source-bin/index.js', 'bin/index.js' ],
+      [ 'node_modules/dr-js/library/Dr.browser.js', 'library/Dr.browser.js' ] // TODO: NOTE: for `getDrBrowserScriptHTML()` from `dr-server`
+    ],
+    fromRoot,
+    fromOutput,
+    logger
+  })
 
   if (!argvFlag('pack')) return
+  padLog(`lint source`)
+  execSync('npm run lint', execOptionRoot)
 
   padLog(`build library`)
   execSync('npm run build-library', execOptionRoot)

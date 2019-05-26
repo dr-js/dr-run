@@ -5,7 +5,8 @@ import { readFileAsync } from 'dr-js/module/node/file/function'
 import { configureLog } from 'dr-server/module/configure/log'
 import { configurePid } from 'dr-server/module/configure/pid'
 import { configureServer, getServerSNIOption } from 'dr-server/module/configure/server'
-import { getServerOption, getLogOption, getPidOption, getAuthOption, getAuthGroupOption } from 'dr-server/module/configure/option'
+import { getServerOption, getLogOption, getPidOption } from 'dr-server/module/configure/option'
+import { getAuthSkipOption, getAuthFileOption, getAuthFileGroupOption } from 'dr-server/module/feature/Auth/option'
 
 import { generateMarkdownHTML } from './markdown/generateMarkdownHTML'
 import { configureResponder } from './configureResponder'
@@ -38,8 +39,9 @@ const startServer = async (optionData) => {
   const logger = await configureLog(getLogOption(optionData))
 
   await configureResponder({
-    ...getAuthOption(optionData),
-    ...getAuthGroupOption(optionData),
+    ...getAuthSkipOption(optionData),
+    ...getAuthFileOption(optionData),
+    ...getAuthFileGroupOption(optionData),
     rootPath: getFirst('root-path')
   }, { server, option, logger })
 

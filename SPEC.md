@@ -37,17 +37,17 @@
 >     --pid-file [OPTIONAL-CHECK] [ARGUMENT=1]
 >       --pid-ignore-exist [OPTIONAL-CHECK] [ARGUMENT=0+]
 >           set to enable
+>     --auth-skip [OPTIONAL-CHECK] [ARGUMENT=0+]
+>         set to enable
 >     --auth-file [OPTIONAL-CHECK] [ARGUMENT=1]
->       --auth-gen [OPTIONAL-CHECK] [ARGUMENT=0+]
->           set to enable
->         --auth-gen-tag [OPTIONAL-CHECK] [ARGUMENT=1]
->         --auth-gen-size [OPTIONAL-CHECK] [ARGUMENT=1]
->         --auth-gen-token-size [OPTIONAL-CHECK] [ARGUMENT=1]
->         --auth-gen-time-gap [OPTIONAL-CHECK] [ARGUMENT=1]
->     --auth-group-path [OPTIONAL-CHECK] [ARGUMENT=1]
->       --auth-group-default-tag [OPTIONAL-CHECK] [ARGUMENT=1]
->       --auth-group-key-suffix [OPTIONAL-CHECK] [ARGUMENT=1]
->       --auth-group-verify-request-tag [OPTIONAL-CHECK] [ARGUMENT=1]
+>       --auth-file-gen-tag [OPTIONAL-CHECK] [ARGUMENT=1]
+>           set to enable auto gen auth file
+>         --auth-file-gen-size [OPTIONAL-CHECK] [ARGUMENT=1]
+>         --auth-file-gen-token-size [OPTIONAL-CHECK] [ARGUMENT=1]
+>         --auth-file-gen-time-gap [OPTIONAL-CHECK] [ARGUMENT=1]
+>     --auth-file-group-path [OPTIONAL-CHECK] [ARGUMENT=1]
+>       --auth-file-group-default-tag [OPTIONAL-CHECK] [ARGUMENT=1]
+>       --auth-file-group-key-suffix [OPTIONAL-CHECK] [ARGUMENT=1]
 >     --root-path [OPTIONAL-CHECK] [ARGUMENT=1]
 >         directory to use as server root
 >     --sni-ssl-config [OPTIONAL-CHECK] [ARGUMENT=1]
@@ -70,16 +70,15 @@
 >     export DR_RUN_LOG_FILE_PREFIX="[OPTIONAL-CHECK] [ARGUMENT=1]"
 >     export DR_RUN_PID_FILE="[OPTIONAL-CHECK] [ARGUMENT=1]"
 >     export DR_RUN_PID_IGNORE_EXIST="[OPTIONAL-CHECK] [ARGUMENT=0+]"
+>     export DR_RUN_AUTH_SKIP="[OPTIONAL-CHECK] [ARGUMENT=0+]"
 >     export DR_RUN_AUTH_FILE="[OPTIONAL-CHECK] [ARGUMENT=1]"
->     export DR_RUN_AUTH_GEN="[OPTIONAL-CHECK] [ARGUMENT=0+]"
->     export DR_RUN_AUTH_GEN_TAG="[OPTIONAL-CHECK] [ARGUMENT=1]"
->     export DR_RUN_AUTH_GEN_SIZE="[OPTIONAL-CHECK] [ARGUMENT=1]"
->     export DR_RUN_AUTH_GEN_TOKEN_SIZE="[OPTIONAL-CHECK] [ARGUMENT=1]"
->     export DR_RUN_AUTH_GEN_TIME_GAP="[OPTIONAL-CHECK] [ARGUMENT=1]"
->     export DR_RUN_AUTH_GROUP_PATH="[OPTIONAL-CHECK] [ARGUMENT=1]"
->     export DR_RUN_AUTH_GROUP_DEFAULT_TAG="[OPTIONAL-CHECK] [ARGUMENT=1]"
->     export DR_RUN_AUTH_GROUP_KEY_SUFFIX="[OPTIONAL-CHECK] [ARGUMENT=1]"
->     export DR_RUN_AUTH_GROUP_VERIFY_REQUEST_TAG="[OPTIONAL-CHECK] [ARGUMENT=1]"
+>     export DR_RUN_AUTH_FILE_GEN_TAG="[OPTIONAL-CHECK] [ARGUMENT=1]"
+>     export DR_RUN_AUTH_FILE_GEN_SIZE="[OPTIONAL-CHECK] [ARGUMENT=1]"
+>     export DR_RUN_AUTH_FILE_GEN_TOKEN_SIZE="[OPTIONAL-CHECK] [ARGUMENT=1]"
+>     export DR_RUN_AUTH_FILE_GEN_TIME_GAP="[OPTIONAL-CHECK] [ARGUMENT=1]"
+>     export DR_RUN_AUTH_FILE_GROUP_PATH="[OPTIONAL-CHECK] [ARGUMENT=1]"
+>     export DR_RUN_AUTH_FILE_GROUP_DEFAULT_TAG="[OPTIONAL-CHECK] [ARGUMENT=1]"
+>     export DR_RUN_AUTH_FILE_GROUP_KEY_SUFFIX="[OPTIONAL-CHECK] [ARGUMENT=1]"
 >     export DR_RUN_ROOT_PATH="[OPTIONAL-CHECK] [ARGUMENT=1]"
 >     export DR_RUN_SNI_SSL_CONFIG="[OPTIONAL-CHECK] [ARGUMENT=1]"
 >     export DR_RUN_GENERATE_MARKDOWN="[OPTIONAL] [ARGUMENT=1]"
@@ -99,16 +98,15 @@
 >     "logFilePrefix": [ "[OPTIONAL-CHECK] [ARGUMENT=1]" ],
 >     "pidFile": [ "[OPTIONAL-CHECK] [ARGUMENT=1]" ],
 >     "pidIgnoreExist": [ "[OPTIONAL-CHECK] [ARGUMENT=0+]" ],
+>     "authSkip": [ "[OPTIONAL-CHECK] [ARGUMENT=0+]" ],
 >     "authFile": [ "[OPTIONAL-CHECK] [ARGUMENT=1]" ],
->     "authGen": [ "[OPTIONAL-CHECK] [ARGUMENT=0+]" ],
->     "authGenTag": [ "[OPTIONAL-CHECK] [ARGUMENT=1]" ],
->     "authGenSize": [ "[OPTIONAL-CHECK] [ARGUMENT=1]" ],
->     "authGenTokenSize": [ "[OPTIONAL-CHECK] [ARGUMENT=1]" ],
->     "authGenTimeGap": [ "[OPTIONAL-CHECK] [ARGUMENT=1]" ],
->     "authGroupPath": [ "[OPTIONAL-CHECK] [ARGUMENT=1]" ],
->     "authGroupDefaultTag": [ "[OPTIONAL-CHECK] [ARGUMENT=1]" ],
->     "authGroupKeySuffix": [ "[OPTIONAL-CHECK] [ARGUMENT=1]" ],
->     "authGroupVerifyRequestTag": [ "[OPTIONAL-CHECK] [ARGUMENT=1]" ],
+>     "authFileGenTag": [ "[OPTIONAL-CHECK] [ARGUMENT=1]" ],
+>     "authFileGenSize": [ "[OPTIONAL-CHECK] [ARGUMENT=1]" ],
+>     "authFileGenTokenSize": [ "[OPTIONAL-CHECK] [ARGUMENT=1]" ],
+>     "authFileGenTimeGap": [ "[OPTIONAL-CHECK] [ARGUMENT=1]" ],
+>     "authFileGroupPath": [ "[OPTIONAL-CHECK] [ARGUMENT=1]" ],
+>     "authFileGroupDefaultTag": [ "[OPTIONAL-CHECK] [ARGUMENT=1]" ],
+>     "authFileGroupKeySuffix": [ "[OPTIONAL-CHECK] [ARGUMENT=1]" ],
 >     "rootPath": [ "[OPTIONAL-CHECK] [ARGUMENT=1]" ],
 >     "sniSslConfig": [ "[OPTIONAL-CHECK] [ARGUMENT=1]" ],
 >     "generateMarkdown": [ "[OPTIONAL] [ARGUMENT=1]" ],

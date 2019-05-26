@@ -1,5 +1,6 @@
 import { Preset, prepareOption } from 'dr-js/module/node/module/Option/preset'
-import { getServerFormatConfig, LogFormatConfig, PidFormatConfig, AuthFormatConfig, AuthGroupFormatConfig } from 'dr-server/module/configure/option'
+import { getServerFormatConfig, LogFormatConfig, PidFormatConfig } from 'dr-server/module/configure/option'
+import { AuthSkipFormatConfig, AuthFileFormatConfig, AuthFileGroupFormatConfig } from 'dr-server/module/feature/Auth/option'
 
 const { Config, parseCompact, parseCompactList } = Preset
 
@@ -7,8 +8,9 @@ const MODE_FORMAT_LIST = [
   getServerFormatConfig([
     LogFormatConfig,
     PidFormatConfig,
-    AuthFormatConfig,
-    AuthGroupFormatConfig,
+    AuthSkipFormatConfig,
+    AuthFileFormatConfig,
+    AuthFileGroupFormatConfig,
     parseCompact('root-path/SP|directory to use as server root'),
     parseCompact('sni-ssl-config/SP,O|SNI SSL JSON { [hostname]: { key, cert, chain } }')
   ]),
