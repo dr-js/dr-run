@@ -10,6 +10,7 @@ import { prepareBufferData, responderSendBufferCompress } from 'dr-js/module/nod
 import { createResponderRouter, createRouteMap, getRouteParamAny } from 'dr-js/module/node/server/Responder/Router'
 import { createResponderServeStatic } from 'dr-js/module/node/server/Responder/ServeStatic'
 
+import { responderCommonExtend } from 'dr-server/module/responder/Common'
 import { configureFeaturePack as configureFeaturePackAuth } from 'dr-server/module/feature/Auth/configureFeaturePack'
 import { configureFeaturePack as configureFeaturePackExplorer } from 'dr-server/module/feature/Explorer/configureFeaturePack'
 import { configureFeaturePack as configureFeaturePackTaskRunner } from 'dr-server/module/feature/TaskRunner/configureFeaturePack'
@@ -73,6 +74,7 @@ const configureResponder = async ({
   server.on('request', createRequestListener({
     responderList: [
       createResponderLog({ log: logger.add }),
+      responderCommonExtend,
       createResponderRouter({ routeMap, baseUrl: option.baseUrl })
     ],
     responderEnd: (store) => {
