@@ -38,21 +38,21 @@ const configureResponder = async ({
   const URL_INDEX = `${URL_STATIC}/index.html`
 
   const featureAuth = await configureFeaturePackAuth({
-    ...{ option, logger, routePrefix },
-    ...{ authSkip },
-    ...{ authFile, authFileGenTag, authFileGenSize, authFileGenTokenSize, authFileGenTimeGap },
-    ...{ authFileGroupPath, authFileGroupDefaultTag, authFileGroupKeySuffix },
+    option, logger, routePrefix,
+    authSkip,
+    authFile, authFileGenTag, authFileGenSize, authFileGenTokenSize, authFileGenTimeGap,
+    authFileGroupPath, authFileGroupDefaultTag, authFileGroupKeySuffix,
     URL_AUTH_CHECK
   })
 
   const featureExplorer = await configureFeaturePackExplorer({
-    ...{ option, logger, routePrefix, featureAuth },
+    option, logger, routePrefix, featureAuth,
     explorerRootPath: PATH_EXPLORER,
     explorerUploadMergePath: PATH_EXPLORER_UPLOAD_MERGE
   })
 
   const featureTaskRunner = await configureFeaturePackTaskRunner({
-    ...{ option, logger, routePrefix, featureAuth },
+    option, logger, routePrefix, featureAuth,
     taskRunnerRootPath: PATH_TASK_RUNNER
   })
 

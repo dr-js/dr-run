@@ -14,22 +14,22 @@ const trimTitle = (string) => string.replace(/[^\w ()`/-]/g, '').trim()
 
 const REGEXP_DATE = /\d\d\d\d\/\d\d\/\d\d/
 
+const themeColorMetaString = `<meta name="theme-color" content="#000">`
+
 const markdownStyleString = `<style>
-body { 
-  margin: 0 auto;
-  padding: 0 8px;
-  max-width: 640px; 
-  word-break: break-word;
-  font-family: Segoe UI,Open Sans,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei,WenQuanYi Micro Hei,sans-serif;
-}
-a { color: #06d; }
-pre, code {
-  overflow: auto;
-  background: rgba(0, 0, 0, 0.05);
-  font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;
-}
-pre code { background: none; }
-blockquote { border-left: 0.5em solid rgba(0, 0, 0, 0.2); }
+body { margin: 0 auto; padding: 0 8px; max-width: 800px;  word-break: break-word; font-family: sans-serif; }
+a { color: #63aeff; }
+ul { padding-inline-start: 1em; list-style: circle; }
+pre { overflow: auto; border: 1px solid #888; font-family: monospace; }
+blockquote { border-left: 0.5em solid #888; }
+::-webkit-scrollbar-thumb { background: #8886; }
+::-webkit-scrollbar-thumb:hover { background: #888a; }
+@media (pointer: fine) { ::-webkit-scrollbar { width: 14px; height: 14px; } }
+@media (pointer: coarse) { ::-webkit-scrollbar { width: 6px; height: 6px; } }
+/* dark theme */
+html { color: #fff; background: #000; }
+p { color: #ddd; }
+b { color: #fff; }
 </style>`
 
 const generateMarkdown = async (file) => {
@@ -43,16 +43,19 @@ const generateMarkdown = async (file) => {
   if (!title) throw new Error(`[generateMarkdown] expect meta link: [meta:title]: # "Title here"`)
   if (!REGEXP_DATE.test(date)) throw new Error(`[generateMarkdown] expect meta link: [meta:date]: # "yyyy/mm/dd"`)
 
-  const headerLink = tokenData
-    .filter((v) => v.type === 'heading')
-    .map(v => `* ${getMarkdownHeaderLink(v.text)}`)
-    .join('\n')
+  const headerTokenList = tokenData.filter((v) => v.type === 'heading') // # some title // {type:"heading", depth:"1", text:"some title"}
+  const headerDepthMap = [ ...new Set(headerTokenList.map((v) => v.depth)) ].sort().reduce((o, v, i) => {
+    o[ v ] = i + 1
+    return o
+  }, {})
+  const headerLink = headerTokenList.map(v => `${'* '.repeat(headerDepthMap[ v.depth ])}${getMarkdownHeaderLink(v.text)}`).join('\n')
 
   const markdownFileName = `${basename(file, extname(file))}.html` // `${basename(file, extname(file))}-${generateHash(markdownString)}.html`
   const markdownHTMLString = COMMON_LAYOUT([
     `<title>${title}</title>`,
+    themeColorMetaString,
     markdownStyleString,
-    tokenData.find(({ type }) => type === 'code') ? highlightStyleString : ''
+    tokenData.find(({ type }) => type === 'code') ? highlightStyleString : '' // ```js\n``` // {type:"code", lang:"js", text:""}
   ], [
     Marked(`# ${title}`),
     Marked(`###### ${date}`),
@@ -102,6 +105,7 @@ const generateMarkdownHTML = async (rootPath) => {
     resolve(rootPath, 'file/[PUBLIC]/index.html'),
     COMMON_LAYOUT([
       `<title>Dr.Weblog</title>`,
+      themeColorMetaString,
       markdownStyleString
     ], [
       `<h1>Dr.Weblog</h1>`,
