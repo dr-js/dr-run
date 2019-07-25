@@ -3,7 +3,8 @@ import { resolve, join, dirname, basename, extname } from 'path'
 import { compareString } from 'dr-js/module/common/compare'
 import { COMMON_LAYOUT } from 'dr-js/module/node/server/commonHTML'
 import { readFileAsync, writeFileAsync, toPosixPath } from 'dr-js/module/node/file/function'
-import { getFileList } from 'dr-js/module/node/file/Directory'
+import { FILE_TYPE } from 'dr-js/module/node/file/File'
+import { getDirectorySubInfoList } from 'dr-js/module/node/file/Directory'
 
 import { getMarkdownHeaderLink } from 'dr-dev/module/node/export/renderMarkdown'
 
@@ -12,7 +13,7 @@ import { Marked, highlightStyleString } from './Marked'
 const joinText = (...args) => args.filter(Boolean).join('\n')
 const trimTitle = (string) => string.replace(/[^\w ()`/-]/g, '').trim()
 
-const REGEXP_DATE = /\d\d\d\d\/\d\d\/\d\d/
+const REGEXP_DATE = /\d\d\d\d\/\d\d\/\d\d/ // lock date format to YYYY/MM/DD
 
 const themeColorMetaString = `<meta name="theme-color" content="#000">`
 
@@ -22,6 +23,7 @@ a { color: #63aeff; }
 ul { padding-inline-start: 1em; list-style: circle; }
 pre { overflow: auto; border: 1px solid #888; font-family: monospace; }
 blockquote { border-left: 0.5em solid #888; }
+* { scrollbar-color: #888a #6664; scrollbar-width: thin; }
 ::-webkit-scrollbar-thumb { background: #8886; }
 ::-webkit-scrollbar-thumb:hover { background: #888a; }
 @media (pointer: fine) { ::-webkit-scrollbar { width: 14px; height: 14px; } }
@@ -37,11 +39,15 @@ const generateMarkdown = async (file) => {
   const markdownString = String(await readFileAsync(file))
 
   const tokenData = Marked.lexer(markdownString)
-  const title = trimTitle(tokenData.links[ 'meta:title' ].title)
-  const date = trimTitle(tokenData.links[ 'meta:date' ].title)
+  const metaTitle = trimTitle(tokenData.links[ 'meta:title' ].title)
+  const metaEditLogList = tokenData.links[ 'meta:edit-log' ].title.split(',').map((v) => v.trim())
 
-  if (!title) throw new Error(`[generateMarkdown] expect meta link: [meta:title]: # "Title here"`)
-  if (!REGEXP_DATE.test(date)) throw new Error(`[generateMarkdown] expect meta link: [meta:date]: # "yyyy/mm/dd"`)
+  if (!metaTitle) throw new Error(`[generateMarkdown] expect meta link: [meta:title]: # "Title here"`)
+  if (!metaEditLogList.every((v) => REGEXP_DATE.test(v))) throw new Error(`[generateMarkdown] expect meta link: [meta:edit-log]: # "yyyy/mm/dd"`)
+
+  const metaEditFirst = metaEditLogList[ 0 ]
+  const metaEditLogCount = metaEditLogList.length
+  const metaEditLogString = `${metaEditFirst}${metaEditLogCount >= 2 ? ` (${metaEditLogList[ metaEditLogCount - 1 ]}, #${metaEditLogCount})` : ''}`
 
   const headerTokenList = tokenData.filter((v) => v.type === 'heading') // # some title // {type:"heading", depth:"1", text:"some title"}
   const headerDepthMap = [ ...new Set(headerTokenList.map((v) => v.depth)) ].sort().reduce((o, v, i) => {
@@ -52,13 +58,13 @@ const generateMarkdown = async (file) => {
 
   const markdownFileName = `${basename(file, extname(file))}.html` // `${basename(file, extname(file))}-${generateHash(markdownString)}.html`
   const markdownHTMLString = COMMON_LAYOUT([
-    `<title>${title}</title>`,
+    `<title>${metaTitle}</title>`,
     themeColorMetaString,
     markdownStyleString,
     tokenData.find(({ type }) => type === 'code') ? highlightStyleString : '' // ```js\n``` // {type:"code", lang:"js", text:""}
   ], [
-    Marked(`# ${title}`),
-    Marked(`###### ${date}`),
+    Marked(`# ${metaTitle}`),
+    Marked(`###### ${metaEditLogString}`),
     Marked(headerLink),
     Marked.parser(Object.assign(tokenData, { links: tokenData.links }))
   ])
@@ -66,8 +72,8 @@ const generateMarkdown = async (file) => {
   const indexTagString = joinText(
     `<p>`,
     `<a href="${encodeURI(toPosixPath(join('t', basename(file))))}" title="get source markdown">📄</a>`,
-    `<a href="${encodeURI(toPosixPath(join('t', markdownFileName)))}">${title}</a>`,
-    `[${date}]`,
+    `<a href="${encodeURI(toPosixPath(join('t', markdownFileName)))}">${metaTitle}</a>`,
+    `[${metaEditLogString}]`,
     `</p>`
   )
 
@@ -75,15 +81,16 @@ const generateMarkdown = async (file) => {
     markdownFileName,
     markdownHTMLString,
     indexTagString,
-    date
+    metaEditFirst
   }
 }
 
 const generateMarkdownHTML = async (rootPath) => {
   __DEV__ && console.log('[generateMarkdownHTML]', rootPath)
 
-  const fileList = (await getFileList(resolve(rootPath, 'file/[PUBLIC]/t/')))
-    .filter((file) => file.endsWith('.md'))
+  const fileList = (await getDirectorySubInfoList(resolve(rootPath, 'file/[PUBLIC]/t/')))
+    .map(({ path, name, type }) => type === FILE_TYPE.File && name.endsWith('.md') && path)
+    .filter(Boolean)
 
   const indexTagList = []
   for (const file of fileList) {
@@ -91,13 +98,13 @@ const generateMarkdownHTML = async (rootPath) => {
       markdownFileName,
       markdownHTMLString,
       indexTagString,
-      date
+      metaEditFirst
     } = await generateMarkdown(file)
 
     console.log('file:', markdownFileName)
     await writeFileAsync(join(dirname(file), markdownFileName), markdownHTMLString)
 
-    indexTagList.push({ indexTagString, date })
+    indexTagList.push({ indexTagString, metaEditFirst })
   }
 
   console.log('file: index.html')
@@ -110,7 +117,7 @@ const generateMarkdownHTML = async (rootPath) => {
     ], [
       `<h1>Dr.Weblog</h1>`,
       ...indexTagList
-        .sort((a, b) => compareString(b.date, a.date))
+        .sort((a, b) => compareString(b.metaEditFirst, a.metaEditFirst))
         .map((v) => v.indexTagString),
       `<h6>${new Date().toISOString()}</h6>`
     ])

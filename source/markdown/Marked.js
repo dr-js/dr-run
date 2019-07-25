@@ -12,11 +12,10 @@ import nginx from 'highlight.js/lib/languages/nginx'
 import plaintext from 'highlight.js/lib/languages/plaintext'
 
 const HIGHLIGHT_LANGUAGE_MAP = {
-  bash,
+  bash, shell: bash,
   css,
   diff,
-  javascript,
-  js: javascript,
+  javascript, js: javascript,
   json,
   lisp,
   nginx,
