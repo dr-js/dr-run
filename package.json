@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "dr-run",
-  "version": "0.0.4",
+  "version": "0.0.5-dev.0",
   "description": "Server source for dr.run",
   "author": "dr-js",
   "license": "MIT",
@@ -9,15 +9,15 @@
   "bin": "bin/index.js",
   "scripts": {
     "// script ======================": "",
-    "script-pack": "babel-node ./script quiet pack",
-    "script-publish": "babel-node ./script pack publish",
-    "script-publish-dev": "babel-node ./script pack publish-dev",
-    "script-generate-spec": "cross-env BABEL_ENV=build-bin babel-node ./script/generateSpec",
+    "script-pack": "node -r @babel/register ./script quiet pack",
+    "script-publish": "node -r @babel/register ./script pack publish",
+    "script-publish-dev": "node -r @babel/register ./script pack publish-dev",
+    "script-generate-spec": "cross-env BABEL_ENV=build-bin node -r @babel/register ./script/generateSpec",
     "// build =======================": "",
-    "build-library": "babel-node ./script/webpack production profile",
-    "build-library-dev": "babel-node ./script/webpack development watch",
+    "build-library": "node -r @babel/register ./script/webpack production profile",
+    "build-library-dev": "node -r @babel/register ./script/webpack development watch",
     "// =============================": "",
-    "analyze-stat": "npx webpack-bundle-analyzer .temp-gitignore/profile-stat.json",
+    "analyze-stat": "npx webpack-bundle-analyzer .temp-gitignore/profile-stat.json output-gitignore/library",
     "lint": "eslint ./source/ ./source-bin/ ./script/",
     "prepack": "echo \"Error: pack with script-*\" && exit 1"
   },
@@ -26,11 +26,11 @@
     "npm": ">=6.10"
   },
   "devDependencies": {
-    "dr-dev": "0.0.7-dev.0",
-    "dr-dev-web": "0.0.7-dev.0",
-    "dr-js": "^0.22.3",
-    "dr-server": "^0.2.0",
-    "highlight.js": "^9.15.9",
+    "dr-dev": "0.0.7-dev.1",
+    "dr-dev-web": "0.0.7-dev.1",
+    "dr-js": "0.23.0-dev.2",
+    "dr-server": "0.3.0-dev.0",
+    "highlight.js": "^9.15.10",
     "marked": "^0.7.0"
   }
 }

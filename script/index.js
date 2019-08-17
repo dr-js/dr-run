@@ -3,7 +3,7 @@ import { execSync } from 'child_process'
 
 import { binary } from 'dr-js/module/common/format'
 
-import { getScriptFileListFromPathList } from 'dr-dev/module/node/fileList'
+import { getScriptFileListFromPathList } from 'dr-dev/module/node/file'
 import { runMain, argvFlag } from 'dr-dev/module/main'
 import { initOutput, packOutput, verifyOutputBinVersion, publishOutput } from 'dr-dev/module/output'
 import { processFileList, fileProcessorWebpack } from 'dr-dev/module/fileProcessor'

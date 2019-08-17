@@ -2,8 +2,8 @@ import { resolve, join, dirname, basename, extname } from 'path'
 
 import { compareString } from 'dr-js/module/common/compare'
 import { COMMON_LAYOUT } from 'dr-js/module/node/server/commonHTML'
-import { readFileAsync, writeFileAsync, toPosixPath } from 'dr-js/module/node/file/function'
-import { FILE_TYPE } from 'dr-js/module/node/file/File'
+import { readFileAsync, writeFileAsync } from 'dr-js/module/node/file/function'
+import { PATH_TYPE, toPosixPath } from 'dr-js/module/node/file/Path'
 import { getDirectorySubInfoList } from 'dr-js/module/node/file/Directory'
 
 import { getMarkdownHeaderLink } from 'dr-dev/module/node/export/renderMarkdown'
@@ -18,16 +18,19 @@ const REGEXP_DATE = /\d\d\d\d\/\d\d\/\d\d/ // lock date format to YYYY/MM/DD
 const themeColorMetaString = `<meta name="theme-color" content="#000">`
 
 const markdownStyleString = `<style>
+* { scrollbar-color: #888a #6664; scrollbar-width: thin; }
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-thumb { background: #8886; }
+::-webkit-scrollbar-thumb:hover { background: #888a; }
+@media (pointer: fine) { ::-webkit-scrollbar { width: 14px; height: 14px; } }
+@media (pointer: coarse) { ::-webkit-scrollbar { width: 6px; height: 6px; } }
+
 body { margin: 0 auto; padding: 0 8px; max-width: 800px;  word-break: break-word; font-family: sans-serif; }
 a { color: #63aeff; }
 ul { padding-inline-start: 1em; list-style: circle; }
 pre { overflow: auto; border: 1px solid #888; font-family: monospace; }
 blockquote { border-left: 0.5em solid #888; }
-* { scrollbar-color: #888a #6664; scrollbar-width: thin; }
-::-webkit-scrollbar-thumb { background: #8886; }
-::-webkit-scrollbar-thumb:hover { background: #888a; }
-@media (pointer: fine) { ::-webkit-scrollbar { width: 14px; height: 14px; } }
-@media (pointer: coarse) { ::-webkit-scrollbar { width: 6px; height: 6px; } }
+
 /* dark theme */
 html { color: #fff; background: #000; }
 p { color: #ddd; }
@@ -89,7 +92,7 @@ const generateMarkdownHTML = async (rootPath) => {
   __DEV__ && console.log('[generateMarkdownHTML]', rootPath)
 
   const fileList = (await getDirectorySubInfoList(resolve(rootPath, 'file/[PUBLIC]/t/')))
-    .map(({ path, name, type }) => type === FILE_TYPE.File && name.endsWith('.md') && path)
+    .map(({ path, name, type }) => type === PATH_TYPE.File && name.endsWith('.md') && path)
     .filter(Boolean)
 
   const indexTagList = []
