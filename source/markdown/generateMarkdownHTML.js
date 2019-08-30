@@ -28,13 +28,15 @@ const markdownStyleString = `<style>
 body { margin: 0 auto; padding: 0 8px; max-width: 800px;  word-break: break-word; font-family: sans-serif; }
 a { color: #63aeff; }
 ul { padding-inline-start: 1em; list-style: circle; }
-pre { overflow: auto; border: 1px solid #888; font-family: monospace; }
+pre { overflow: auto; font-family: monospace; }
+pre code { border: none; }
+pre, code { border: 1px solid #888; }
 blockquote { border-left: 0.5em solid #888; }
 
 /* dark theme */
-html { color: #fff; background: #000; }
+html { background: #000; }
+html, b { color: #fff; }
 p { color: #ddd; }
-b { color: #fff; }
 </style>`
 
 const generateMarkdown = async (file) => {
