@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "dr-run",
-  "version": "0.0.5-dev.1",
+  "version": "0.0.5-dev.2",
   "description": "Server source for dr.run",
   "author": "dr-js",
   "license": "MIT",
@@ -26,8 +26,8 @@
     "npm": ">=6.10"
   },
   "devDependencies": {
-    "dr-dev": "0.0.7-dev.1",
-    "dr-dev-web": "0.0.7-dev.1",
+    "dr-dev": "0.0.7-dev.2",
+    "dr-dev-web": "0.0.7-dev.2",
     "dr-js": "0.23.0-dev.2",
     "dr-server": "0.3.0-dev.0",
     "highlight.js": "^9.15.10",

@@ -11,7 +11,7 @@ import { getMarkdownHeaderLink } from 'dr-dev/module/node/export/renderMarkdown'
 import { Marked, highlightStyleString } from './Marked'
 
 const joinText = (...args) => args.filter(Boolean).join('\n')
-const trimTitle = (string) => string.replace(/[^\w ()`/-]/g, '').trim()
+const trimTitle = (string) => string.replace(/[^\w (),.`/-]/g, '').trim()
 
 const REGEXP_DATE = /\d\d\d\d\/\d\d\/\d\d/ // lock date format to YYYY/MM/DD
 
@@ -25,7 +25,7 @@ const markdownStyleString = `<style>
 @media (pointer: fine) { ::-webkit-scrollbar { width: 14px; height: 14px; } }
 @media (pointer: coarse) { ::-webkit-scrollbar { width: 6px; height: 6px; } }
 
-body { margin: 0 auto; padding: 0 8px; max-width: 800px;  word-break: break-word; font-family: sans-serif; }
+body { margin: 0 auto; padding: 0 8px; max-width: 800px;  word-break: break-word; font-family: "Open Sans", "Helvetica Neue", Arial, "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif; }
 a { color: #63aeff; }
 ul { padding-inline-start: 1em; list-style: circle; }
 pre { overflow: auto; font-family: monospace; }
