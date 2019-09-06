@@ -1,12 +1,15 @@
 {
   "private": true,
-  "name": "dr-run",
-  "version": "0.0.5-dev.2",
+  "name": "@dr-js/run",
+  "version": "0.0.0-dev.0",
   "description": "Server source for dr.run",
   "author": "dr-js",
   "license": "MIT",
   "repository": "github:dr-js/dr-run",
-  "bin": "bin/index.js",
+  "bin": {
+    "dr-run": "bin/index.js",
+    "DRR": "bin/index.js"
+  },
   "scripts": {
     "// script ======================": "",
     "script-pack": "node -r @babel/register ./script quiet pack",
@@ -26,10 +29,10 @@
     "npm": ">=6.10"
   },
   "devDependencies": {
-    "dr-dev": "0.0.7-dev.2",
-    "dr-dev-web": "0.0.7-dev.2",
-    "dr-js": "0.23.0-dev.2",
-    "dr-server": "0.3.0-dev.0",
+    "@dr-js/core": "0.0.0-dev.0",
+    "@dr-js/dev": "0.0.0-dev.0",
+    "@dr-js/dev-web": "0.0.0-dev.0",
+    "@dr-js/node": "0.0.0-dev.0",
     "highlight.js": "^9.15.10",
     "marked": "^0.7.0"
   }

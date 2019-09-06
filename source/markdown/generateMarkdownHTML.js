@@ -1,12 +1,12 @@
 import { resolve, join, dirname, basename, extname } from 'path'
 
-import { compareString } from 'dr-js/module/common/compare'
-import { COMMON_LAYOUT } from 'dr-js/module/node/server/commonHTML'
-import { readFileAsync, writeFileAsync } from 'dr-js/module/node/file/function'
-import { PATH_TYPE, toPosixPath } from 'dr-js/module/node/file/Path'
-import { getDirectorySubInfoList } from 'dr-js/module/node/file/Directory'
+import { compareString } from '@dr-js/core/module/common/compare'
+import { COMMON_LAYOUT } from '@dr-js/core/module/node/server/commonHTML'
+import { readFileAsync, writeFileAsync } from '@dr-js/core/module/node/file/function'
+import { PATH_TYPE, toPosixPath } from '@dr-js/core/module/node/file/Path'
+import { getDirectorySubInfoList } from '@dr-js/core/module/node/file/Directory'
 
-import { getMarkdownHeaderLink } from 'dr-dev/module/node/export/renderMarkdown'
+import { getMarkdownHeaderLink } from '@dr-js/dev/module/node/export/renderMarkdown'
 
 import { Marked, highlightStyleString } from './Marked'
 
@@ -111,6 +111,8 @@ const generateMarkdownHTML = async (rootPath) => {
 
     indexTagList.push({ indexTagString, metaEditFirst })
   }
+
+  // TODO: also generate gzip files
 
   console.log('file: index.html')
   await writeFileAsync(

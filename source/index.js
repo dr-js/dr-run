@@ -1,12 +1,12 @@
 import { resolve } from 'path'
 
-import { readFileAsync } from 'dr-js/module/node/file/function'
+import { readFileAsync } from '@dr-js/core/module/node/file/function'
 
-import { configureLog } from 'dr-server/module/share/configure/log'
-import { configurePid } from 'dr-server/module/share/configure/pid'
-import { configureServer, getServerSNIOption } from 'dr-server/module/share/configure/server'
-import { getServerOption, getLogOption, getPidOption } from 'dr-server/module/share/option'
-import { getAuthSkipOption, getAuthFileOption, getAuthFileGroupOption } from 'dr-server/module/feature/Auth/option'
+import { configureLog } from '@dr-js/node/module/server/share/configure/log'
+import { configurePid } from '@dr-js/node/module/server/share/configure/pid'
+import { configureServer, getServerSNIOption } from '@dr-js/node/module/server/share/configure/server'
+import { getServerOption, getLogOption, getPidOption } from '@dr-js/node/module/server/share/option'
+import { getAuthSkipOption, getAuthFileOption, getAuthFileGroupOption } from '@dr-js/node/module/server/feature/Auth/option'
 
 import { generateMarkdownHTML } from './markdown/generateMarkdownHTML'
 import { configureResponder } from './configureResponder'

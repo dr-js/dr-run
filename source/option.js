@@ -1,6 +1,6 @@
-import { Preset, prepareOption } from 'dr-js/module/node/module/Option/preset'
-import { getServerFormatConfig, LogFormatConfig, PidFormatConfig } from 'dr-server/module/share/option'
-import { AuthSkipFormatConfig, AuthFileFormatConfig, AuthFileGroupFormatConfig } from 'dr-server/module/feature/Auth/option'
+import { Preset, prepareOption } from '@dr-js/core/module/node/module/Option/preset'
+import { getServerFormatConfig, LogFormatConfig, PidFormatConfig } from '@dr-js/node/module/server/share/option'
+import { AuthSkipFormatConfig, AuthFileFormatConfig, AuthFileGroupFormatConfig } from '@dr-js/node/module/server/feature/Auth/option'
 
 const { Config, parseCompact, parseCompactList } = Preset
 

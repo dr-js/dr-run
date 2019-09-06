@@ -1,20 +1,20 @@
 import { resolve } from 'path'
 import { gunzipSync } from 'zlib'
 
-import { BASIC_EXTENSION_MAP } from 'dr-js/module/common/module/MIME'
-import { createPathPrefixLock } from 'dr-js/module/node/file/Path'
-import { createDirectory } from 'dr-js/module/node/file/Directory'
-import { createRequestListener } from 'dr-js/module/node/server/Server'
-import { responderEnd, responderEndWithRedirect, createResponderLog, createResponderLogEnd } from 'dr-js/module/node/server/Responder/Common'
-import { prepareBufferData, responderSendBufferCompress } from 'dr-js/module/node/server/Responder/Send'
-import { createResponderRouter, createRouteMap, getRouteParamAny } from 'dr-js/module/node/server/Responder/Router'
-import { createResponderServeStatic } from 'dr-js/module/node/server/Responder/ServeStatic'
+import { BASIC_EXTENSION_MAP } from '@dr-js/core/module/common/module/MIME'
+import { createPathPrefixLock } from '@dr-js/core/module/node/file/Path'
+import { createDirectory } from '@dr-js/core/module/node/file/Directory'
+import { createRequestListener } from '@dr-js/core/module/node/server/Server'
+import { responderEnd, responderEndWithRedirect, createResponderLog, createResponderLogEnd } from '@dr-js/core/module/node/server/Responder/Common'
+import { prepareBufferData, responderSendBufferCompress } from '@dr-js/core/module/node/server/Responder/Send'
+import { createResponderRouter, createRouteMap, getRouteParamAny } from '@dr-js/core/module/node/server/Responder/Router'
+import { createResponderServeStatic } from '@dr-js/core/module/node/server/Responder/ServeStatic'
 
-import { responderCommonExtend } from 'dr-server/module/share/responder'
-import { configureFeaturePack as configureFeaturePackAuth } from 'dr-server/module/feature/Auth/configureFeaturePack'
-import { configureFeaturePack as configureFeaturePackPermission } from 'dr-server/module/feature/Permission/configureFeaturePack'
-import { configureFeaturePack as configureFeaturePackExplorer } from 'dr-server/module/feature/Explorer/configureFeaturePack'
-import { configureFeaturePack as configureFeaturePackTaskRunner } from 'dr-server/module/feature/TaskRunner/configureFeaturePack'
+import { responderCommonExtend } from '@dr-js/node/module/server/share/responder'
+import { configureFeaturePack as configureFeaturePackAuth } from '@dr-js/node/module/server/feature/Auth/configureFeaturePack'
+import { configureFeaturePack as configureFeaturePackPermission } from '@dr-js/node/module/server/feature/Permission/configureFeaturePack'
+import { configureFeaturePack as configureFeaturePackExplorer } from '@dr-js/node/module/server/feature/Explorer/configureFeaturePack'
+import { configureFeaturePack as configureFeaturePackTaskRunner } from '@dr-js/node/module/server/feature/TaskRunner/configureFeaturePack'
 
 const PUBLIC_CACHE_FILE_SIZE_MAX = 1024 * 1024 // in byte, 1MB
 const PUBLIC_CACHE_EXPIRE_TIME = 5 * 60 * 1000 // 5min, in msec
