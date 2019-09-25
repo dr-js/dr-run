@@ -10,7 +10,6 @@ import { prepareBufferData, responderSendBufferCompress } from '@dr-js/core/modu
 import { createResponderRouter, createRouteMap, getRouteParamAny } from '@dr-js/core/module/node/server/Responder/Router'
 import { createResponderServeStatic } from '@dr-js/core/module/node/server/Responder/ServeStatic'
 
-import { responderCommonExtend } from '@dr-js/node/module/server/share/responder'
 import { configureFeaturePack as configureFeaturePackAuth } from '@dr-js/node/module/server/feature/Auth/configureFeaturePack'
 import { configureFeaturePack as configureFeaturePackPermission } from '@dr-js/node/module/server/feature/Permission/configureFeaturePack'
 import { configureFeaturePack as configureFeaturePackExplorer } from '@dr-js/node/module/server/feature/Explorer/configureFeaturePack'
@@ -19,14 +18,15 @@ import { configureFeaturePack as configureFeaturePackTaskRunner } from '@dr-js/n
 const PUBLIC_CACHE_FILE_SIZE_MAX = 1024 * 1024 // in byte, 1MB
 const PUBLIC_CACHE_EXPIRE_TIME = 5 * 60 * 1000 // 5min, in msec
 
-const configureResponder = async ({
-  authSkip,
-  authFile, authFileGenTag, authFileGenSize, authFileGenTokenSize, authFileGenTimeGap,
-  authFileGroupPath, authFileGroupDefaultTag, authFileGroupKeySuffix,
+const configureServer = async ({
+  serverPack: { server, option }, logger, routePrefix = '',
 
   rootPath,
-  routePrefix = ''
-}, { server, option, logger }) => {
+
+  authSkip,
+  authFile,
+  authFileGroupPath, authFileGroupDefaultTag, authFileGroupKeySuffix
+}) => {
   const PATH_EXPLORER = rootPath
   const PATH_EXPLORER_UPLOAD_MERGE = resolve(rootPath, 'file/[UPLOAD]/')
   const PATH_TASK_RUNNER = resolve(rootPath, 'file/[TASK]/')
@@ -39,25 +39,25 @@ const configureResponder = async ({
   const URL_INDEX = `${URL_STATIC}/index.html`
 
   const featureAuth = await configureFeaturePackAuth({
-    option, logger, routePrefix,
+    logger, routePrefix,
     authSkip,
-    authFile, authFileGenTag, authFileGenSize, authFileGenTokenSize, authFileGenTimeGap,
+    authFile,
     authFileGroupPath, authFileGroupDefaultTag, authFileGroupKeySuffix,
     URL_AUTH_CHECK
   })
   const featurePermission = await configureFeaturePackPermission({
-    option, logger, routePrefix,
+    logger, routePrefix,
     permissionType: 'allow'
   })
 
   const featureExplorer = await configureFeaturePackExplorer({
-    option, logger, routePrefix, featureAuth, featurePermission,
+    logger, routePrefix, featureAuth, featurePermission,
     explorerRootPath: PATH_EXPLORER,
     explorerUploadMergePath: PATH_EXPLORER_UPLOAD_MERGE
   })
 
   const featureTaskRunner = await configureFeaturePackTaskRunner({
-    option, logger, routePrefix, featureAuth, featurePermission,
+    logger, routePrefix, featureAuth, featurePermission,
     taskRunnerRootPath: PATH_TASK_RUNNER
   })
 
@@ -79,7 +79,6 @@ const configureResponder = async ({
   server.on('request', createRequestListener({
     responderList: [
       createResponderLog({ log: logger.add }),
-      responderCommonExtend,
       createResponderRouter({ routeMap, baseUrl: option.baseUrl })
     ],
     responderEnd: (store) => {
@@ -95,4 +94,4 @@ const createResponderFavicon = () => {
   return (store) => responderSendBufferCompress(store, faviconBufferData)
 }
 
-export { configureResponder }
+export { configureServer }

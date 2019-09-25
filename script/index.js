@@ -13,13 +13,13 @@ const PATH_ROOT = resolve(__dirname, '..')
 const PATH_OUTPUT = resolve(__dirname, '../output-gitignore')
 const fromRoot = (...args) => resolve(PATH_ROOT, ...args)
 const fromOutput = (...args) => resolve(PATH_OUTPUT, ...args)
-const execOptionRoot = { cwd: fromRoot(), stdio: argvFlag('quiet') ? [ 'ignore', 'ignore', 'inherit' ] : 'inherit', shell: true }
+const execShell = (command) => execSync(command, { cwd: fromRoot(), stdio: argvFlag('quiet') ? [ 'ignore', 'ignore', 'inherit' ] : 'inherit' })
 
 runMain(async (logger) => {
   const { padLog } = logger
 
   padLog('generate spec')
-  execSync(`npm run script-generate-spec`, execOptionRoot)
+  execShell('npm run script-generate-spec')
 
   const packageJSON = await initOutput({
     copyMapPathList: [
@@ -32,13 +32,13 @@ runMain(async (logger) => {
   })
 
   if (!argvFlag('pack')) return
-  padLog(`lint source`)
-  execSync('npm run lint', execOptionRoot)
+  padLog('lint source')
+  execShell('npm run lint')
 
-  padLog(`build library`)
-  execSync('npm run build-library', execOptionRoot)
+  padLog('build library')
+  execShell('npm run build-library')
 
-  padLog(`process output`)
+  padLog('process output')
   const fileList = await getScriptFileListFromPathList([ '.' ], fromOutput)
   let sizeReduce = 0
   sizeReduce += await minifyFileListWithTerser({ fileList, option: getTerserOption(), rootPath: PATH_OUTPUT, logger })

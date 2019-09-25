@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "@dr-js/run",
-  "version": "0.0.0-dev.0",
+  "version": "0.1.0",
   "description": "Server source for dr.run",
   "author": "dr-js",
   "license": "MIT",
@@ -25,15 +25,15 @@
     "prepack": "echo \"Error: pack with script-*\" && exit 1"
   },
   "engines": {
-    "node": ">=10.16",
-    "npm": ">=6.10"
+    "node": ">=12.13",
+    "npm": ">=6.12"
   },
   "devDependencies": {
-    "@dr-js/core": "0.0.0-dev.0",
-    "@dr-js/dev": "0.0.0-dev.0",
-    "@dr-js/dev-web": "0.0.0-dev.0",
-    "@dr-js/node": "0.0.0-dev.0",
-    "highlight.js": "^9.15.10",
+    "@dr-js/core": "0.1.2-dev.0",
+    "@dr-js/dev": "^0.1.2",
+    "@dr-js/dev-web": "^0.1.2",
+    "@dr-js/node": "^0.1.1",
+    "highlight.js": "^9.16.2",
     "marked": "^0.7.0"
   }
 }

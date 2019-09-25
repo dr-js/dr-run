@@ -1,58 +1,42 @@
-import { resolve } from 'path'
+import { describeServerPack } from '@dr-js/core/module/node/server/Server'
 
-import { readFileAsync } from '@dr-js/core/module/node/file/function'
-
-import { configureLog } from '@dr-js/node/module/server/share/configure/log'
-import { configurePid } from '@dr-js/node/module/server/share/configure/pid'
-import { configureServer, getServerSNIOption } from '@dr-js/node/module/server/share/configure/server'
-import { getServerOption, getLogOption, getPidOption } from '@dr-js/node/module/server/share/option'
+import { configureLog } from '@dr-js/node/module/module/Log'
+import { configurePid } from '@dr-js/node/module/module/Pid'
+import { configureServerPack } from '@dr-js/node/module/module/ServerPack'
+import { getServerPackOption, getLogOption, getPidOption } from '@dr-js/node/module/server/share/option'
 import { getAuthSkipOption, getAuthFileOption, getAuthFileGroupOption } from '@dr-js/node/module/server/feature/Auth/option'
 
 import { generateMarkdownHTML } from './markdown/generateMarkdownHTML'
-import { configureResponder } from './configureResponder'
+import { configureServer } from './configureServer'
 import { MODE_NAME_LIST, parseOption, formatUsage } from './option'
 import { name as packageName, version as packageVersion } from '../package.json'
 
-const loadSNISSL = async (SNISSLConfig, SNIConfig = {}) => {
-  const fromSNISSLConfig = (path) => resolve(SNISSLConfig, '..', path)
-  for (const [ hostname, { key, cert, chain } ] of Object.entries(JSON.parse(await readFileAsync(SNISSLConfig)))) {
-    SNIConfig[ hostname ] = {
-      fileSSLKey: fromSNISSLConfig(key),
-      fileSSLCert: fromSNISSLConfig(cert),
-      fileSSLChain: fromSNISSLConfig(chain)
-    }
-  }
-  return getServerSNIOption(SNIConfig)
-}
-
-const startServer = async (optionData) => {
-  const { getFirst, tryGetFirst } = optionData
-  const SNISSLConfig = tryGetFirst('sni-ssl-config')
-
-  await configurePid(getPidOption(optionData))
-
-  const { server, start, option } = await configureServer({
-    ...getServerOption(optionData),
-    ...(SNISSLConfig ? await loadSNISSL(SNISSLConfig) : {})
-  })
-
-  const logger = await configureLog(getLogOption(optionData))
-
-  await configureResponder({
-    ...getAuthSkipOption(optionData),
-    ...getAuthFileOption(optionData),
-    ...getAuthFileGroupOption(optionData),
-    rootPath: getFirst('root-path')
-  }, { server, option, logger })
-
-  await start()
-  logger.add(`[SERVER UP] version: ${packageVersion}, pid: ${process.pid}, at: ${option.baseUrl}`)
+const startServer = async (serverOption, featureOption) => {
+  await configurePid(serverOption)
+  const serverPack = await configureServerPack(serverOption)
+  const logger = await configureLog(serverOption)
+  await configureServer({ serverPack, logger, ...featureOption })
+  await serverPack.start()
+  logger.add(describeServerPack(
+    serverPack.option,
+    `${packageName}@${packageVersion}`,
+    Object.entries(featureOption).map(([ key, value ]) => value !== undefined && `${key}: ${value}`)
+  ))
 }
 
 const runMode = async (modeName, optionData) => {
   switch (modeName) {
     case 'host':
-      return startServer(optionData)
+      return startServer({
+        ...getPidOption(optionData),
+        ...getServerPackOption(optionData),
+        ...getLogOption(optionData)
+      }, {
+        rootPath: optionData.getFirst('root-path'),
+        ...getAuthSkipOption(optionData),
+        ...getAuthFileOption(optionData),
+        ...getAuthFileGroupOption(optionData)
+      })
     case 'generate-markdown':
       return generateMarkdownHTML(optionData.getFirst('generate-markdown'))
   }
@@ -60,16 +44,12 @@ const runMode = async (modeName, optionData) => {
 
 const main = async () => {
   const optionData = await parseOption()
+  if (optionData.tryGet('version')) return console.log(JSON.stringify({ packageName, packageVersion }, null, 2))
+  if (optionData.tryGet('help')) return console.log(formatUsage())
   const modeName = MODE_NAME_LIST.find((name) => optionData.tryGet(name))
-
-  if (!modeName) {
-    return optionData.tryGet('version')
-      ? console.log(JSON.stringify({ packageName, packageVersion }, null, '  '))
-      : console.log(formatUsage(null, optionData.tryGet('help') ? null : 'simple'))
-  }
-
+  if (!modeName) throw new Error('no mode specified')
   await runMode(modeName, optionData).catch((error) => {
-    console.warn(`[Error] in mode: ${modeName}:`, error.stack || error)
+    console.warn(`[Error] in mode: ${modeName}: ${error.stack || error}`)
     process.exit(2)
   })
 }

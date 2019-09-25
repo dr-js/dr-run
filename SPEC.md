@@ -4,8 +4,8 @@
 * [Bin Option Format](#bin-option-format)
 
 #### Export Path
-+ 📄 [source/configureResponder.js](source/configureResponder.js)
-  - `configureResponder`
++ 📄 [source/configureServer.js](source/configureServer.js)
+  - `configureServer`
 + 📄 [source/option.js](source/option.js)
   - `MODE_NAME_LIST`, `formatUsage`, `parseOption`
 + 📄 [source/markdown/Marked.js](source/markdown/Marked.js)
@@ -26,32 +26,29 @@
 >       show version
 >   --host --H -H [OPTIONAL] [ARGUMENT=1]
 >       set "hostname:port"
->     --https --S -S [OPTIONAL-CHECK] [ARGUMENT=0+]
+>     --https --S -S [ARGUMENT=0+]
 >         set to enable
->       --file-SSL-key [OPTIONAL-CHECK] [ARGUMENT=1]
->       --file-SSL-cert [OPTIONAL-CHECK] [ARGUMENT=1]
->       --file-SSL-chain [OPTIONAL-CHECK] [ARGUMENT=1]
->       --file-SSL-dhparam [OPTIONAL-CHECK] [ARGUMENT=1]
->     --log-path [OPTIONAL-CHECK] [ARGUMENT=1]
->       --log-file-prefix [OPTIONAL-CHECK] [ARGUMENT=1]
->     --pid-file [OPTIONAL-CHECK] [ARGUMENT=1]
->       --pid-ignore-exist [OPTIONAL-CHECK] [ARGUMENT=0+]
->           set to enable
->     --auth-skip [OPTIONAL-CHECK] [ARGUMENT=0+]
->         set to enable
->     --auth-file [OPTIONAL-CHECK] [ARGUMENT=1]
->       --auth-file-gen-tag [OPTIONAL-CHECK] [ARGUMENT=1]
->           set to enable auto gen auth file
->         --auth-file-gen-size [OPTIONAL-CHECK] [ARGUMENT=1]
->         --auth-file-gen-token-size [OPTIONAL-CHECK] [ARGUMENT=1]
->         --auth-file-gen-time-gap [OPTIONAL-CHECK] [ARGUMENT=1]
->     --auth-file-group-path [OPTIONAL-CHECK] [ARGUMENT=1]
->       --auth-file-group-default-tag [OPTIONAL-CHECK] [ARGUMENT=1]
->       --auth-file-group-key-suffix [OPTIONAL-CHECK] [ARGUMENT=1]
->     --root-path [OPTIONAL-CHECK] [ARGUMENT=1]
+>       --file-TLS-key [ARGUMENT=1]
+>       --file-TLS-cert [ARGUMENT=1]
+>       --file-TLS-CA [ARGUMENT=1]
+>           trusted CA cert
+>       --file-TLS-SNI-config [ARGUMENT=1]
+>           TLS SNI JSON like: { [hostname]: { key, cert, ca } }
+>       --file-TLS-dhparam [ARGUMENT=1]
+>           Diffie-Hellman Key Exchange, generate with: "openssl dhparam -dsaparam -outform PEM -out output/path/dh4096.pem 4096"
+>     --root-path [ARGUMENT=1]
 >         directory to use as server root
->     --sni-ssl-config [OPTIONAL-CHECK] [ARGUMENT=1]
->         SNI SSL JSON { [hostname]: { key, cert, chain } }
+>     --log-path [ARGUMENT=1]
+>       --log-file-prefix [ARGUMENT=1]
+>     --pid-file [ARGUMENT=1]
+>       --pid-ignore-exist [ARGUMENT=0+]
+>           set to enable
+>     --auth-skip [ARGUMENT=0+]
+>         set to enable
+>     --auth-file [ARGUMENT=1]
+>     --auth-file-group-path [ARGUMENT=1]
+>       --auth-file-group-default-tag [ARGUMENT=1]
+>       --auth-file-group-key-suffix [ARGUMENT=1]
 >   --generate-markdown --G -G [OPTIONAL] [ARGUMENT=1]
 >       expect root-path, load Markdown and generate server Weblog & index
 > ENV Usage:
@@ -61,26 +58,22 @@
 >     export DR_RUN_HELP="[OPTIONAL] [ARGUMENT=0+]"
 >     export DR_RUN_VERSION="[OPTIONAL] [ARGUMENT=0+]"
 >     export DR_RUN_HOST="[OPTIONAL] [ARGUMENT=1]"
->     export DR_RUN_HTTPS="[OPTIONAL-CHECK] [ARGUMENT=0+]"
->     export DR_RUN_FILE_SSL_KEY="[OPTIONAL-CHECK] [ARGUMENT=1]"
->     export DR_RUN_FILE_SSL_CERT="[OPTIONAL-CHECK] [ARGUMENT=1]"
->     export DR_RUN_FILE_SSL_CHAIN="[OPTIONAL-CHECK] [ARGUMENT=1]"
->     export DR_RUN_FILE_SSL_DHPARAM="[OPTIONAL-CHECK] [ARGUMENT=1]"
->     export DR_RUN_LOG_PATH="[OPTIONAL-CHECK] [ARGUMENT=1]"
->     export DR_RUN_LOG_FILE_PREFIX="[OPTIONAL-CHECK] [ARGUMENT=1]"
->     export DR_RUN_PID_FILE="[OPTIONAL-CHECK] [ARGUMENT=1]"
->     export DR_RUN_PID_IGNORE_EXIST="[OPTIONAL-CHECK] [ARGUMENT=0+]"
->     export DR_RUN_AUTH_SKIP="[OPTIONAL-CHECK] [ARGUMENT=0+]"
->     export DR_RUN_AUTH_FILE="[OPTIONAL-CHECK] [ARGUMENT=1]"
->     export DR_RUN_AUTH_FILE_GEN_TAG="[OPTIONAL-CHECK] [ARGUMENT=1]"
->     export DR_RUN_AUTH_FILE_GEN_SIZE="[OPTIONAL-CHECK] [ARGUMENT=1]"
->     export DR_RUN_AUTH_FILE_GEN_TOKEN_SIZE="[OPTIONAL-CHECK] [ARGUMENT=1]"
->     export DR_RUN_AUTH_FILE_GEN_TIME_GAP="[OPTIONAL-CHECK] [ARGUMENT=1]"
->     export DR_RUN_AUTH_FILE_GROUP_PATH="[OPTIONAL-CHECK] [ARGUMENT=1]"
->     export DR_RUN_AUTH_FILE_GROUP_DEFAULT_TAG="[OPTIONAL-CHECK] [ARGUMENT=1]"
->     export DR_RUN_AUTH_FILE_GROUP_KEY_SUFFIX="[OPTIONAL-CHECK] [ARGUMENT=1]"
->     export DR_RUN_ROOT_PATH="[OPTIONAL-CHECK] [ARGUMENT=1]"
->     export DR_RUN_SNI_SSL_CONFIG="[OPTIONAL-CHECK] [ARGUMENT=1]"
+>     export DR_RUN_HTTPS="[ARGUMENT=0+]"
+>     export DR_RUN_FILE_TLS_KEY="[ARGUMENT=1]"
+>     export DR_RUN_FILE_TLS_CERT="[ARGUMENT=1]"
+>     export DR_RUN_FILE_TLS_CA="[ARGUMENT=1]"
+>     export DR_RUN_FILE_TLS_SNI_CONFIG="[ARGUMENT=1]"
+>     export DR_RUN_FILE_TLS_DHPARAM="[ARGUMENT=1]"
+>     export DR_RUN_ROOT_PATH="[ARGUMENT=1]"
+>     export DR_RUN_LOG_PATH="[ARGUMENT=1]"
+>     export DR_RUN_LOG_FILE_PREFIX="[ARGUMENT=1]"
+>     export DR_RUN_PID_FILE="[ARGUMENT=1]"
+>     export DR_RUN_PID_IGNORE_EXIST="[ARGUMENT=0+]"
+>     export DR_RUN_AUTH_SKIP="[ARGUMENT=0+]"
+>     export DR_RUN_AUTH_FILE="[ARGUMENT=1]"
+>     export DR_RUN_AUTH_FILE_GROUP_PATH="[ARGUMENT=1]"
+>     export DR_RUN_AUTH_FILE_GROUP_DEFAULT_TAG="[ARGUMENT=1]"
+>     export DR_RUN_AUTH_FILE_GROUP_KEY_SUFFIX="[ARGUMENT=1]"
 >     export DR_RUN_GENERATE_MARKDOWN="[OPTIONAL] [ARGUMENT=1]"
 >   "
 > CONFIG Usage:
@@ -89,26 +82,22 @@
 >     "help": [ "[OPTIONAL] [ARGUMENT=0+]" ],
 >     "version": [ "[OPTIONAL] [ARGUMENT=0+]" ],
 >     "host": [ "[OPTIONAL] [ARGUMENT=1]" ],
->     "https": [ "[OPTIONAL-CHECK] [ARGUMENT=0+]" ],
->     "fileSSLKey": [ "[OPTIONAL-CHECK] [ARGUMENT=1]" ],
->     "fileSSLCert": [ "[OPTIONAL-CHECK] [ARGUMENT=1]" ],
->     "fileSSLChain": [ "[OPTIONAL-CHECK] [ARGUMENT=1]" ],
->     "fileSSLDhparam": [ "[OPTIONAL-CHECK] [ARGUMENT=1]" ],
->     "logPath": [ "[OPTIONAL-CHECK] [ARGUMENT=1]" ],
->     "logFilePrefix": [ "[OPTIONAL-CHECK] [ARGUMENT=1]" ],
->     "pidFile": [ "[OPTIONAL-CHECK] [ARGUMENT=1]" ],
->     "pidIgnoreExist": [ "[OPTIONAL-CHECK] [ARGUMENT=0+]" ],
->     "authSkip": [ "[OPTIONAL-CHECK] [ARGUMENT=0+]" ],
->     "authFile": [ "[OPTIONAL-CHECK] [ARGUMENT=1]" ],
->     "authFileGenTag": [ "[OPTIONAL-CHECK] [ARGUMENT=1]" ],
->     "authFileGenSize": [ "[OPTIONAL-CHECK] [ARGUMENT=1]" ],
->     "authFileGenTokenSize": [ "[OPTIONAL-CHECK] [ARGUMENT=1]" ],
->     "authFileGenTimeGap": [ "[OPTIONAL-CHECK] [ARGUMENT=1]" ],
->     "authFileGroupPath": [ "[OPTIONAL-CHECK] [ARGUMENT=1]" ],
->     "authFileGroupDefaultTag": [ "[OPTIONAL-CHECK] [ARGUMENT=1]" ],
->     "authFileGroupKeySuffix": [ "[OPTIONAL-CHECK] [ARGUMENT=1]" ],
->     "rootPath": [ "[OPTIONAL-CHECK] [ARGUMENT=1]" ],
->     "sniSslConfig": [ "[OPTIONAL-CHECK] [ARGUMENT=1]" ],
+>     "https": [ "[ARGUMENT=0+]" ],
+>     "fileTLSKey": [ "[ARGUMENT=1]" ],
+>     "fileTLSCert": [ "[ARGUMENT=1]" ],
+>     "fileTLSCA": [ "[ARGUMENT=1]" ],
+>     "fileTLSSNIConfig": [ "[ARGUMENT=1]" ],
+>     "fileTLSDhparam": [ "[ARGUMENT=1]" ],
+>     "rootPath": [ "[ARGUMENT=1]" ],
+>     "logPath": [ "[ARGUMENT=1]" ],
+>     "logFilePrefix": [ "[ARGUMENT=1]" ],
+>     "pidFile": [ "[ARGUMENT=1]" ],
+>     "pidIgnoreExist": [ "[ARGUMENT=0+]" ],
+>     "authSkip": [ "[ARGUMENT=0+]" ],
+>     "authFile": [ "[ARGUMENT=1]" ],
+>     "authFileGroupPath": [ "[ARGUMENT=1]" ],
+>     "authFileGroupDefaultTag": [ "[ARGUMENT=1]" ],
+>     "authFileGroupKeySuffix": [ "[ARGUMENT=1]" ],
 >     "generateMarkdown": [ "[OPTIONAL] [ARGUMENT=1]" ],
 >   }
 > ```
