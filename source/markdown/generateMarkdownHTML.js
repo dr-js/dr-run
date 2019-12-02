@@ -1,7 +1,7 @@
 import { resolve, join, dirname, basename, extname } from 'path'
 
 import { compareString } from '@dr-js/core/module/common/compare'
-import { COMMON_LAYOUT } from '@dr-js/core/module/node/server/commonHTML'
+import { COMMON_LAYOUT, COMMON_STYLE } from '@dr-js/core/module/node/server/commonHTML'
 import { readFileAsync, writeFileAsync } from '@dr-js/core/module/node/file/function'
 import { PATH_TYPE, toPosixPath } from '@dr-js/core/module/node/file/Path'
 import { getDirectorySubInfoList } from '@dr-js/core/module/node/file/Directory'
@@ -15,28 +15,13 @@ const trimTitle = (string) => string.replace(/[^\w (),.`/-]/g, '').trim()
 
 const REGEXP_DATE = /\d\d\d\d\/\d\d\/\d\d/ // lock date format to YYYY/MM/DD
 
-const themeColorMetaString = `<meta name="theme-color" content="#000">`
-
 const markdownStyleString = `<style>
-* { scrollbar-color: #888a #6664; scrollbar-width: thin; }
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-thumb { background: #8886; }
-::-webkit-scrollbar-thumb:hover { background: #888a; }
-@media (pointer: fine) { ::-webkit-scrollbar { width: 14px; height: 14px; } }
-@media (pointer: coarse) { ::-webkit-scrollbar { width: 6px; height: 6px; } }
-
 body { margin: 0 auto; padding: 0 8px; max-width: 800px;  word-break: break-word; font-family: "Open Sans", "Helvetica Neue", Arial, "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif; }
-a { color: #63aeff; }
 ul { padding-inline-start: 1em; list-style: circle; }
 pre { overflow: auto; font-family: monospace; }
 pre code { border: none; }
 pre, code { border: 1px solid #888; }
 blockquote { border-left: 0.5em solid #888; }
-
-/* dark theme */
-html { background: #000; }
-html, b { color: #fff; }
-p { color: #ddd; }
 </style>`
 
 const generateMarkdown = async (file) => {
@@ -64,7 +49,7 @@ const generateMarkdown = async (file) => {
   const markdownFileName = `${basename(file, extname(file))}.html` // `${basename(file, extname(file))}-${generateHash(markdownString)}.html`
   const markdownHTMLString = COMMON_LAYOUT([
     `<title>${metaTitle}</title>`,
-    themeColorMetaString,
+    COMMON_STYLE({ boxReset: false, bodyReset: false }),
     markdownStyleString,
     tokenData.find(({ type }) => type === 'code') ? highlightStyleString : '' // ```js\n``` // {type:"code", lang:"js", text:""}
   ], [
@@ -119,7 +104,7 @@ const generateMarkdownHTML = async (rootPath) => {
     resolve(rootPath, 'file/[PUBLIC]/index.html'),
     COMMON_LAYOUT([
       `<title>Dr.Weblog</title>`,
-      themeColorMetaString,
+      COMMON_STYLE({ boxReset: false, bodyReset: false }),
       markdownStyleString
     ], [
       `<h1>Dr.Weblog</h1>`,
