@@ -6,8 +6,8 @@
 
 Server source for [dr.run](https://dr.run)
 
-[i:npm]: https://img.shields.io/npm/v/@dr-js/run.svg?colorB=blue
-[i:npm-dev]: https://img.shields.io/npm/v/@dr-js/run/dev.svg
+[i:npm]: https://img.shields.io/npm/v/@dr-js/run?colorB=blue
+[i:npm-dev]: https://img.shields.io/npm/v/@dr-js/run/dev
 [l:npm]: https://npm.im/@dr-js/run
 [i:size]: https://packagephobia.now.sh/badge?p=@dr-js/run
 [l:size]: https://packagephobia.now.sh/result?p=@dr-js/run
