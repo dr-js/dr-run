@@ -21,12 +21,11 @@ const buildOutput = async ({ logger }) => {
 }
 
 const processOutput = async ({ logger }) => {
-  logger.padLog('process output')
   const fileList = await getScriptFileListFromPathList([ '.' ], fromOutput)
   let sizeReduce = 0
   sizeReduce += await minifyFileListWithTerser({ fileList, option: getTerserOption(), rootPath: PATH_OUTPUT, logger })
   sizeReduce += await processFileList({ fileList, processor: fileProcessorWebpack, rootPath: PATH_OUTPUT, logger })
-  logger.padLog(`total size reduce: ${sizeReduce}B`)
+  logger.log(`total size reduce: ${sizeReduce}B`)
 }
 
 runMain(async (logger) => {
