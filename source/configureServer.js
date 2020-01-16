@@ -18,17 +18,20 @@ import { configureFeaturePack as configureFeaturePackTaskRunner } from '@dr-js/n
 const PUBLIC_CACHE_FILE_SIZE_MAX = 1024 * 1024 // in byte, 1MB
 const PUBLIC_CACHE_EXPIRE_TIME = 5 * 60 * 1000 // 5min, in msec
 
+const PATH_TEMP = 'file/[TEMP]/'
+
 const configureServer = async ({
   serverPack: { server, option }, logger, routePrefix = '',
 
   rootPath,
+  tempPath = resolve(rootPath, PATH_TEMP),
 
   authSkip,
   authFile,
   authFileGroupPath, authFileGroupDefaultTag, authFileGroupKeySuffix
 }) => {
   const PATH_EXPLORER = rootPath
-  const PATH_EXPLORER_UPLOAD_MERGE = resolve(rootPath, 'file/[UPLOAD]/')
+  const PATH_EXPLORER_UPLOAD_MERGE = tempPath
   const PATH_TASK_RUNNER = resolve(rootPath, 'file/[TASK]/')
   const PATH_PUBLIC = resolve(rootPath, 'file/[PUBLIC]/')
 
@@ -94,4 +97,7 @@ const createResponderFavicon = () => {
   return (store) => responderSendBufferCompress(store, faviconBufferData)
 }
 
-export { configureServer }
+export {
+  PATH_TEMP,
+  configureServer
+}

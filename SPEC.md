@@ -5,7 +5,7 @@
 
 #### Export Path
 + 📄 [source/configureServer.js](source/configureServer.js)
-  - `configureServer`
+  - `PATH_TEMP`, `configureServer`
 + 📄 [source/option.js](source/option.js)
   - `MODE_NAME_LIST`, `formatUsage`, `parseOption`
 + 📄 [source/markdown/Marked.js](source/markdown/Marked.js)
@@ -49,6 +49,8 @@
 >           <DEPRECATE> Diffie-Hellman Key Exchange, generate with: "openssl dhparam -dsaparam -outform PEM -out output/path/dh4096.pem 4096"
 >     --root-path [ARGUMENT=1]
 >         directory to use as server root
+>     --temp-path [ARGUMENT=1]
+>         directory to save temp file, default to "root/file/[TEMP]/"
 >     --log-path [ARGUMENT=1]
 >       --log-file-prefix [ARGUMENT=1]
 >     --pid-file [ARGUMENT=1]
@@ -78,6 +80,7 @@
 >     export DR_RUN_FILE_TLS_SNI_CONFIG="[ARGUMENT=1]"
 >     export DR_RUN_FILE_TLS_DHPARAM="[ARGUMENT=1]"
 >     export DR_RUN_ROOT_PATH="[ARGUMENT=1]"
+>     export DR_RUN_TEMP_PATH="[ARGUMENT=1]"
 >     export DR_RUN_LOG_PATH="[ARGUMENT=1]"
 >     export DR_RUN_LOG_FILE_PREFIX="[ARGUMENT=1]"
 >     export DR_RUN_PID_FILE="[ARGUMENT=1]"
@@ -104,6 +107,7 @@
 >     "fileTLSSNIConfig": [ "[ARGUMENT=1]" ],
 >     "fileTLSDhparam": [ "[ARGUMENT=1]" ],
 >     "rootPath": [ "[ARGUMENT=1]" ],
+>     "tempPath": [ "[ARGUMENT=1]" ],
 >     "logPath": [ "[ARGUMENT=1]" ],
 >     "logFilePrefix": [ "[ARGUMENT=1]" ],
 >     "pidFile": [ "[ARGUMENT=1]" ],

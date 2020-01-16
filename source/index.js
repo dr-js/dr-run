@@ -33,6 +33,7 @@ const runMode = async (modeName, optionData) => {
         ...getLogOption(optionData)
       }, {
         rootPath: optionData.getFirst('root-path'),
+        tempPath: optionData.tryGetFirst('temp-path'),
         ...getAuthSkipOption(optionData),
         ...getAuthFileOption(optionData),
         ...getAuthFileGroupOption(optionData)

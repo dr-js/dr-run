@@ -2,18 +2,23 @@ import { Preset, prepareOption } from '@dr-js/core/module/node/module/Option/pre
 import { getServerPackFormatConfig, LogFormatConfig, PidFormatConfig } from '@dr-js/node/module/server/share/option'
 import { AuthSkipFormatConfig, AuthFileFormatConfig, AuthFileGroupFormatConfig } from '@dr-js/node/module/server/feature/Auth/option'
 
-const { Config, parseCompact, parseCompactList } = Preset
+import { PATH_TEMP } from './configureServer'
+
+const { Config, parseCompactList } = Preset
 
 const MODE_FORMAT_LIST = [
   getServerPackFormatConfig([
-    parseCompact('root-path/SP|directory to use as server root'),
+    ...parseCompactList(
+      'root-path/SP|directory to use as server root',
+      `temp-path/SP,O|directory to save temp file, default to "root/${PATH_TEMP}"`
+    ),
     LogFormatConfig,
     PidFormatConfig,
     AuthSkipFormatConfig,
     AuthFileFormatConfig,
     AuthFileGroupFormatConfig
   ]),
-  parseCompact('generate-markdown,G/SP,O|expect root-path, load Markdown and generate server Weblog & index')
+  ...parseCompactList('generate-markdown,G/SP,O|expect root-path, load Markdown and generate server Weblog & index')
 ]
 const MODE_NAME_LIST = MODE_FORMAT_LIST.map(({ name }) => name)
 
