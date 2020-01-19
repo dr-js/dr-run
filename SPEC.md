@@ -18,35 +18,23 @@
 > ```
 > CLI Usage:
 >   --config --c -c [OPTIONAL] [ARGUMENT=1]
->       from ENV: set to "env"
->       from JS/JSON file: set to "path/to/config.js|json"
+>       from ENV: set to "env" to enable, not using be default
+>       from JS/JSON file: set to "path/to/file.config.js|json"
 >   --help --h -h [OPTIONAL] [ARGUMENT=0+]
 >       show full help
 >   --version --v -v [OPTIONAL] [ARGUMENT=0+]
 >       show version
 >   --host --H -H [OPTIONAL] [ARGUMENT=1]
 >       set "hostname:port"
->     --https --S -S [ARGUMENT=0+]
->         set to enable
->       --TLS-SNI-config [ARGUMENT=1]
->           TLS SNI config map:
->             multi config: { [hostname]: { key: pathOrBuffer, cert: pathOrBuffer, ca: pathOrBuffer } }, default to special hostname "default", or the first config
->             single config: { key: pathOrBuffer, cert: pathOrBuffer, ca: pathOrBuffer }
->             key: Private keys in PEM format
->             cert: Cert chains in PEM format
->             ca: Optionally override the trusted CA certificates
+>     --TLS-SNI-config [ARGUMENT=1]
+>         TLS SNI config map, set to enable https:
+>           multi config: { [hostname]: { key: pathOrBuffer, cert: pathOrBuffer, ca: pathOrBuffer } }, default to special hostname "default", or the first config
+>           single config: { key: pathOrBuffer, cert: pathOrBuffer, ca: pathOrBuffer }
+>           key: Private keys in PEM format
+>           cert: Cert chains in PEM format
+>           ca: Optionally override the trusted CA certificates
 >       --TLS-dhparam [ARGUMENT=1]
 >           pathOrBuffer; Diffie-Hellman Key Exchange, generate with: "openssl dhparam -dsaparam -outform PEM -out output/path/dh4096.pem 4096"
->       --file-TLS-key [ARGUMENT=1]
->           <DEPRECATE> Private keys in PEM format
->       --file-TLS-cert [ARGUMENT=1]
->           <DEPRECATE> Cert chains in PEM format
->       --file-TLS-CA [ARGUMENT=1]
->           <DEPRECATE> Optionally override the trusted CA certificates
->       --file-TLS-SNI-config [ARGUMENT=1]
->           <DEPRECATE> path to TLS SNI JSON file
->       --file-TLS-dhparam [ARGUMENT=1]
->           <DEPRECATE> Diffie-Hellman Key Exchange, generate with: "openssl dhparam -dsaparam -outform PEM -out output/path/dh4096.pem 4096"
 >     --root-path [ARGUMENT=1]
 >         directory to use as server root
 >     --temp-path [ARGUMENT=1]
@@ -71,14 +59,8 @@
 >     export DR_RUN_HELP="[OPTIONAL] [ARGUMENT=0+]"
 >     export DR_RUN_VERSION="[OPTIONAL] [ARGUMENT=0+]"
 >     export DR_RUN_HOST="[OPTIONAL] [ARGUMENT=1]"
->     export DR_RUN_HTTPS="[ARGUMENT=0+]"
 >     export DR_RUN_TLS_SNI_CONFIG="[ARGUMENT=1]"
 >     export DR_RUN_TLS_DHPARAM="[ARGUMENT=1]"
->     export DR_RUN_FILE_TLS_KEY="[ARGUMENT=1]"
->     export DR_RUN_FILE_TLS_CERT="[ARGUMENT=1]"
->     export DR_RUN_FILE_TLS_CA="[ARGUMENT=1]"
->     export DR_RUN_FILE_TLS_SNI_CONFIG="[ARGUMENT=1]"
->     export DR_RUN_FILE_TLS_DHPARAM="[ARGUMENT=1]"
 >     export DR_RUN_ROOT_PATH="[ARGUMENT=1]"
 >     export DR_RUN_TEMP_PATH="[ARGUMENT=1]"
 >     export DR_RUN_LOG_PATH="[ARGUMENT=1]"
@@ -98,14 +80,8 @@
 >     "help": [ "[OPTIONAL] [ARGUMENT=0+]" ],
 >     "version": [ "[OPTIONAL] [ARGUMENT=0+]" ],
 >     "host": [ "[OPTIONAL] [ARGUMENT=1]" ],
->     "https": [ "[ARGUMENT=0+]" ],
 >     "TLSSNIConfig": [ "[ARGUMENT=1]" ],
 >     "TLSDhparam": [ "[ARGUMENT=1]" ],
->     "fileTLSKey": [ "[ARGUMENT=1]" ],
->     "fileTLSCert": [ "[ARGUMENT=1]" ],
->     "fileTLSCA": [ "[ARGUMENT=1]" ],
->     "fileTLSSNIConfig": [ "[ARGUMENT=1]" ],
->     "fileTLSDhparam": [ "[ARGUMENT=1]" ],
 >     "rootPath": [ "[ARGUMENT=1]" ],
 >     "tempPath": [ "[ARGUMENT=1]" ],
 >     "logPath": [ "[ARGUMENT=1]" ],
