@@ -13,7 +13,6 @@ import { createResponderServeStatic } from '@dr-js/core/module/node/server/Respo
 import { configureFeaturePack as configureFeaturePackAuth } from '@dr-js/node/module/server/feature/Auth/configureFeaturePack'
 import { configureFeaturePack as configureFeaturePackPermission } from '@dr-js/node/module/server/feature/Permission/configureFeaturePack'
 import { configureFeaturePack as configureFeaturePackExplorer } from '@dr-js/node/module/server/feature/Explorer/configureFeaturePack'
-import { configureFeaturePack as configureFeaturePackTaskRunner } from '@dr-js/node/module/server/feature/TaskRunner/configureFeaturePack'
 
 const PUBLIC_CACHE_FILE_SIZE_MAX = 1024 * 1024 // in byte, 1MB
 const PUBLIC_CACHE_EXPIRE_TIME = 5 * 60 * 1000 // 5min, in msec
@@ -32,7 +31,6 @@ const configureServer = async ({
 }) => {
   const PATH_EXPLORER = rootPath
   const PATH_EXPLORER_UPLOAD_MERGE = tempPath
-  const PATH_TASK_RUNNER = resolve(rootPath, 'file/[TASK]/')
   const PATH_PUBLIC = resolve(rootPath, 'file/[PUBLIC]/')
 
   await createDirectory(PATH_PUBLIC)
@@ -59,11 +57,6 @@ const configureServer = async ({
     explorerUploadMergePath: PATH_EXPLORER_UPLOAD_MERGE
   })
 
-  const featureTaskRunner = await configureFeaturePackTaskRunner({
-    logger, routePrefix, featureAuth, featurePermission,
-    taskRunnerRootPath: PATH_TASK_RUNNER
-  })
-
   const responderLogEnd = createResponderLogEnd({ log: logger.add })
 
   const fromStaticRoot = createPathPrefixLock(PATH_PUBLIC)
@@ -73,7 +66,6 @@ const configureServer = async ({
   const routeMap = createRouteMap([
     ...featureAuth.routeList,
     ...featureExplorer.routeList,
-    ...featureTaskRunner.routeList,
     [ `${URL_STATIC}/*`, 'GET', (store) => responderServeStatic(store, getParamFilePath(store)) ],
     [ '/', 'GET', (store) => responderEndWithRedirect(store, { redirectUrl: URL_INDEX }) ],
     [ [ '/favicon', '/favicon.ico' ], 'GET', createResponderFavicon() ]

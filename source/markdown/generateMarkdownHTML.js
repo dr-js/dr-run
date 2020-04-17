@@ -1,10 +1,10 @@
 import { resolve, join, dirname, basename, extname } from 'path'
+import { promises as fsAsync } from 'fs'
 
 import { compareString } from '@dr-js/core/module/common/compare'
 import { COMMON_LAYOUT, COMMON_STYLE } from '@dr-js/core/module/node/server/commonHTML'
-import { readFileAsync, writeFileAsync } from '@dr-js/core/module/node/file/function'
 import { PATH_TYPE, toPosixPath } from '@dr-js/core/module/node/file/Path'
-import { getDirectorySubInfoList } from '@dr-js/core/module/node/file/Directory'
+import { getDirInfoList } from '@dr-js/core/module/node/file/Directory'
 
 import { getMarkdownHeaderLink } from '@dr-js/dev/module/node/export/renderMarkdown'
 
@@ -26,7 +26,7 @@ blockquote { border-left: 0.5em solid #888; }
 
 const generateMarkdown = async (file) => {
   __DEV__ && console.log('[generateMarkdown]', file)
-  const markdownString = String(await readFileAsync(file))
+  const markdownString = String(await fsAsync.readFile(file))
 
   const tokenData = Marked.lexer(markdownString)
   const metaTitle = trimTitle(tokenData.links[ 'meta:title' ].title)
@@ -78,8 +78,8 @@ const generateMarkdown = async (file) => {
 const generateMarkdownHTML = async (rootPath) => {
   __DEV__ && console.log('[generateMarkdownHTML]', rootPath)
 
-  const fileList = (await getDirectorySubInfoList(resolve(rootPath, 'file/[PUBLIC]/t/')))
-    .map(({ path, name, type }) => type === PATH_TYPE.File && name.endsWith('.md') && path)
+  const fileList = (await getDirInfoList(resolve(rootPath, 'file/[PUBLIC]/t/')))
+    .map(({ type, name, path }) => type === PATH_TYPE.File && name.endsWith('.md') && path)
     .filter(Boolean)
 
   const indexTagList = []
@@ -92,7 +92,7 @@ const generateMarkdownHTML = async (rootPath) => {
     } = await generateMarkdown(file)
 
     console.log('file:', markdownFileName)
-    await writeFileAsync(join(dirname(file), markdownFileName), markdownHTMLString)
+    await fsAsync.writeFile(join(dirname(file), markdownFileName), markdownHTMLString)
 
     indexTagList.push({ indexTagString, metaEditFirst })
   }
@@ -100,7 +100,7 @@ const generateMarkdownHTML = async (rootPath) => {
   // TODO: also generate gzip files
 
   console.log('file: index.html')
-  await writeFileAsync(
+  await fsAsync.writeFile(
     resolve(rootPath, 'file/[PUBLIC]/index.html'),
     COMMON_LAYOUT([
       '<title>Dr.Weblog</title>',

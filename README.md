@@ -19,4 +19,4 @@ Server source for [dr.run](https://dr.run)
 - 📁 [source-bin/](source-bin/)
   - bin source code, in output package will be `@dr-js/run/bin`
 - 📄 [SPEC.md](SPEC.md)
-  - list of all directly accessible codes, sort of an API lockfile
+  - list of all directly accessible codes, sort of API lockfile

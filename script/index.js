@@ -44,7 +44,7 @@ runMain(async (logger) => {
   const isTest = argvFlag('test', 'publish', 'publish-dev')
   isTest && logger.padLog('lint source')
   isTest && execShell('npm run lint')
-  // isTest && await processOutput({ logger }) // once more
+  isTest && await processOutput({ logger }) // once more
   // isTest && logger.padLog('test output')
   // isTest && execShell('npm run test-output')
   await clearOutput({ fromOutput, logger })

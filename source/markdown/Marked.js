@@ -1,6 +1,6 @@
 import Marked from 'marked'
 
-import { registerLanguage, highlight } from 'highlight.js/lib/highlight'
+import { registerLanguage, highlight } from 'highlight.js/lib/core'
 
 import bash from 'highlight.js/lib/languages/bash'
 import css from 'highlight.js/lib/languages/css'
