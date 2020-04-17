@@ -32,8 +32,8 @@ const generateMarkdown = async (file) => {
   const metaTitle = trimTitle(tokenData.links[ 'meta:title' ].title)
   const metaEditLogList = tokenData.links[ 'meta:edit-log' ].title.split(',').map((v) => v.trim())
 
-  if (!metaTitle) throw new Error(`[generateMarkdown] expect meta link: [meta:title]: # "Title here"`)
-  if (!metaEditLogList.every((v) => REGEXP_DATE.test(v))) throw new Error(`[generateMarkdown] expect meta link: [meta:edit-log]: # "yyyy/mm/dd"`)
+  if (!metaTitle) throw new Error('[generateMarkdown] expect meta link: [meta:title]: # "Title here"')
+  if (!metaEditLogList.every((v) => REGEXP_DATE.test(v))) throw new Error('[generateMarkdown] expect meta link: [meta:edit-log]: # "yyyy/mm/dd"')
 
   const metaEditFirst = metaEditLogList[ 0 ]
   const metaEditLogCount = metaEditLogList.length
@@ -60,11 +60,11 @@ const generateMarkdown = async (file) => {
   ])
 
   const indexTagString = joinText(
-    `<p>`,
+    '<p>',
     `<a href="${encodeURI(toPosixPath(join('t', basename(file))))}" title="get source markdown">📄</a>`,
     `<a href="${encodeURI(toPosixPath(join('t', markdownFileName)))}">${metaTitle}</a>`,
     `[${metaEditLogString}]`,
-    `</p>`
+    '</p>'
   )
 
   return {
@@ -103,11 +103,11 @@ const generateMarkdownHTML = async (rootPath) => {
   await writeFileAsync(
     resolve(rootPath, 'file/[PUBLIC]/index.html'),
     COMMON_LAYOUT([
-      `<title>Dr.Weblog</title>`,
+      '<title>Dr.Weblog</title>',
       COMMON_STYLE({ boxReset: false, bodyReset: false }),
       markdownStyleString
     ], [
-      `<h1>Dr.Weblog</h1>`,
+      '<h1>Dr.Weblog</h1>',
       ...indexTagList
         .sort((a, b) => compareString(b.metaEditFirst, a.metaEditFirst))
         .map((v) => v.indexTagString),
