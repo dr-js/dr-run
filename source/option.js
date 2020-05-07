@@ -1,6 +1,7 @@
 import { Preset, prepareOption } from '@dr-js/core/module/node/module/Option/preset'
 import { getServerPackFormatConfig, LogFormatConfig, PidFormatConfig } from '@dr-js/node/module/server/share/option'
 import { AuthSkipFormatConfig, AuthFileFormatConfig, AuthFileGroupFormatConfig } from '@dr-js/node/module/server/feature/Auth/option'
+import { WebSocketTunnelFormatConfig } from '@dr-js/node/module/server/feature/WebSocketTunnel/option'
 
 import { PATH_TEMP } from './configureServer'
 
@@ -16,7 +17,8 @@ const MODE_FORMAT_LIST = [
     PidFormatConfig,
     AuthSkipFormatConfig,
     AuthFileFormatConfig,
-    AuthFileGroupFormatConfig
+    AuthFileGroupFormatConfig,
+    WebSocketTunnelFormatConfig
   ]),
   ...parseCompactList('generate-markdown,G/SP,O|expect root-path, load Markdown and generate server Weblog & index')
 ]

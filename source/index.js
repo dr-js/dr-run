@@ -5,6 +5,7 @@ import { configurePid } from '@dr-js/node/module/module/Pid'
 import { configureServerPack } from '@dr-js/node/module/module/ServerPack'
 import { getServerPackOption, getLogOption, getPidOption } from '@dr-js/node/module/server/share/option'
 import { getAuthSkipOption, getAuthFileOption, getAuthFileGroupOption } from '@dr-js/node/module/server/feature/Auth/option'
+import { getWebSocketTunnelOption } from '@dr-js/node/module/server/feature/WebSocketTunnel/option'
 
 import { generateMarkdownHTML } from './markdown/generateMarkdownHTML'
 import { configureServer } from './configureServer'
@@ -36,7 +37,8 @@ const runMode = async (modeName, optionData) => {
         tempPath: optionData.tryGetFirst('temp-path'),
         ...getAuthSkipOption(optionData),
         ...getAuthFileOption(optionData),
-        ...getAuthFileGroupOption(optionData)
+        ...getAuthFileGroupOption(optionData),
+        ...getWebSocketTunnelOption(optionData)
       })
     case 'generate-markdown':
       return generateMarkdownHTML(optionData.getFirst('generate-markdown'))

@@ -50,6 +50,8 @@
 >     --auth-file-group-path [ARGUMENT=1]
 >       --auth-file-group-default-tag [ARGUMENT=1]
 >       --auth-file-group-key-suffix [ARGUMENT=1]
+>     --websocket-tunnel-host [ARGUMENT=1]
+>         use format: "hostname:port", default hostname: 127.0.0.1
 >   --generate-markdown --G -G [OPTIONAL] [ARGUMENT=1]
 >       expect root-path, load Markdown and generate server Weblog & index
 > ENV Usage:
@@ -72,6 +74,7 @@
 >     export DR_RUN_AUTH_FILE_GROUP_PATH="[ARGUMENT=1]"
 >     export DR_RUN_AUTH_FILE_GROUP_DEFAULT_TAG="[ARGUMENT=1]"
 >     export DR_RUN_AUTH_FILE_GROUP_KEY_SUFFIX="[ARGUMENT=1]"
+>     export DR_RUN_WEBSOCKET_TUNNEL_HOST="[ARGUMENT=1]"
 >     export DR_RUN_GENERATE_MARKDOWN="[OPTIONAL] [ARGUMENT=1]"
 >   "
 > CONFIG Usage:
@@ -93,6 +96,7 @@
 >     "authFileGroupPath": [ "[ARGUMENT=1]" ],
 >     "authFileGroupDefaultTag": [ "[ARGUMENT=1]" ],
 >     "authFileGroupKeySuffix": [ "[ARGUMENT=1]" ],
+>     "websocketTunnelHost": [ "[ARGUMENT=1]" ],
 >     "generateMarkdown": [ "[OPTIONAL] [ARGUMENT=1]" ],
 >   }
 > ```
