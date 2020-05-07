@@ -63,7 +63,13 @@ const configureServer = async ({
   })
 
   const featureWebSocketTunnel = webSocketTunnelHost && await configureFeaturePackWebSocketTunnel({
-    logger, routePrefix, featureAuth,
+    logger, routePrefix, featureAuth: await configureFeaturePackAuth({ // TODO: NOTE: allow setting with a different auth priority
+      logger, routePrefix,
+      authSkip: !authFileGroupPath && !authFile, // last
+      authFile: !authFileGroupPath && authFile, // second
+      authFileGroupPath, authFileGroupDefaultTag, authFileGroupKeySuffix, // first
+      URL_AUTH_CHECK
+    }),
     webSocketTunnelHost
   })
 
