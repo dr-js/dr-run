@@ -1,5 +1,8 @@
+import { tmpdir } from 'os'
+import { resolve } from 'path'
 import { describeServerPack } from '@dr-js/core/module/node/server/Server'
 
+import { setupSIGUSR2 } from '@dr-js/node/module/module/RuntimeDump'
 import { configureLog } from '@dr-js/node/module/module/Log'
 import { configurePid } from '@dr-js/node/module/module/Pid'
 import { configureServerPack } from '@dr-js/node/module/module/ServerPack'
@@ -28,6 +31,8 @@ const startServer = async (serverOption, featureOption) => {
 const runMode = async (modeName, optionData) => {
   switch (modeName) {
     case 'host':
+      setupSIGUSR2(resolve(tmpdir(), `${encodeURIComponent(packageName)}@${encodeURIComponent(packageVersion)}`))
+
       return startServer({
         ...getPidOption(optionData),
         ...getServerPackOption(optionData),
