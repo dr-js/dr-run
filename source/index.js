@@ -26,13 +26,12 @@ const startServer = async (serverOption, featureOption) => {
     `${packageName}@${packageVersion}`,
     Object.entries(featureOption).map(([ key, value ]) => value !== undefined && `${key}: ${value}`)
   ))
+  setupSIGUSR2(resolve(tmpdir(), packageName, packageVersion))
 }
 
 const runMode = async (modeName, optionData) => {
   switch (modeName) {
     case 'host':
-      setupSIGUSR2(resolve(tmpdir(), `${encodeURIComponent(packageName)}@${encodeURIComponent(packageVersion)}`))
-
       return startServer({
         ...getPidOption(optionData),
         ...getServerPackOption(optionData),
