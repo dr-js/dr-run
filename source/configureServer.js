@@ -15,7 +15,7 @@ import { createUpdateRequestListener } from '@dr-js/core/module/node/server/WebS
 import { configureFeaturePack as configureFeaturePackAuth } from '@dr-js/node/module/server/feature/Auth/configureFeaturePack'
 import { configureFeaturePack as configureFeaturePackPermission } from '@dr-js/node/module/server/feature/Permission/configureFeaturePack'
 import { configureFeaturePack as configureFeaturePackExplorer } from '@dr-js/node/module/server/feature/Explorer/configureFeaturePack'
-import { configureFeaturePack as configureFeaturePackWebSocketTunnel } from '@dr-js/node/module/server/feature/WebSocketTunnel/configureFeaturePack'
+import { configureFeaturePack as configureFeaturePackWebSocketTunnel } from '@dr-js/node/module/server/feature/WebSocketTunnelDev/configureFeaturePack'
 
 const PUBLIC_CACHE_FILE_SIZE_MAX = 1024 * 1024 // in byte, 1MB
 const PUBLIC_CACHE_EXPIRE_TIME = 5 * 60 * 1000 // 5min, in msec
@@ -29,6 +29,7 @@ const configureServer = async ({
   rootPath,
   tempPath = resolve(rootPath, PATH_TEMP),
 
+  authKey,
   authSkip,
   authFile,
   authFileGroupPath, authFileGroupDefaultTag, authFileGroupKeySuffix,
@@ -46,6 +47,7 @@ const configureServer = async ({
 
   const featureAuth = await configureFeaturePackAuth({
     logger, routePrefix,
+    authKey,
     authSkip,
     authFile,
     authFileGroupPath, authFileGroupDefaultTag, authFileGroupKeySuffix,

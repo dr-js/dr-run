@@ -44,6 +44,8 @@
 >     --pid-file [ARGUMENT=1]
 >       --pid-ignore-exist [ARGUMENT=0+]
 >           set to enable
+>     --auth-key [ARGUMENT=1]
+>         set for non-default key
 >     --auth-skip [ARGUMENT=0+]
 >         set to enable
 >     --auth-file [ARGUMENT=1]
@@ -51,7 +53,7 @@
 >       --auth-file-group-default-tag [ARGUMENT=1]
 >       --auth-file-group-key-suffix [ARGUMENT=1]
 >     --websocket-tunnel-host [ARGUMENT=1]
->         use format: "hostname:port", default hostname: 127.0.0.1
+>         [under DEV] use format: "hostname:port", default hostname: 127.0.0.1
 >   --generate-markdown --G -G [OPTIONAL] [ARGUMENT=1]
 >       expect root-path, load Markdown and generate server Weblog & index
 > ENV Usage:
@@ -69,6 +71,7 @@
 >     export DR_RUN_LOG_FILE_PREFIX="[ARGUMENT=1]"
 >     export DR_RUN_PID_FILE="[ARGUMENT=1]"
 >     export DR_RUN_PID_IGNORE_EXIST="[ARGUMENT=0+]"
+>     export DR_RUN_AUTH_KEY="[ARGUMENT=1]"
 >     export DR_RUN_AUTH_SKIP="[ARGUMENT=0+]"
 >     export DR_RUN_AUTH_FILE="[ARGUMENT=1]"
 >     export DR_RUN_AUTH_FILE_GROUP_PATH="[ARGUMENT=1]"
@@ -91,6 +94,7 @@
 >     "logFilePrefix": [ "[ARGUMENT=1]" ],
 >     "pidFile": [ "[ARGUMENT=1]" ],
 >     "pidIgnoreExist": [ "[ARGUMENT=0+]" ],
+>     "authKey": [ "[ARGUMENT=1]" ],
 >     "authSkip": [ "[ARGUMENT=0+]" ],
 >     "authFile": [ "[ARGUMENT=1]" ],
 >     "authFileGroupPath": [ "[ARGUMENT=1]" ],
