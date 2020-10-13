@@ -1,98 +1,158 @@
 import { resolve } from 'path'
 import { gunzipSync } from 'zlib'
 
+import { objectPickKey } from '@dr-js/core/module/common/immutable/Object'
 import { BASIC_EXTENSION_MAP } from '@dr-js/core/module/common/module/MIME'
-import { createPathPrefixLock } from '@dr-js/core/module/node/file/Path'
+
 import { createDirectory } from '@dr-js/core/module/node/file/Directory'
 import { createRequestListener } from '@dr-js/core/module/node/server/Server'
 import { responderEnd, responderEndWithRedirect, createResponderLog, createResponderLogEnd } from '@dr-js/core/module/node/server/Responder/Common'
 import { prepareBufferData, responderSendBufferCompress } from '@dr-js/core/module/node/server/Responder/Send'
-import { createResponderRouter, createRouteMap, getRouteParamAny } from '@dr-js/core/module/node/server/Responder/Router'
-import { createResponderServeStatic } from '@dr-js/core/module/node/server/Responder/ServeStatic'
+import { createResponderRouter, createRouteMap } from '@dr-js/core/module/node/server/Responder/Router'
 import { enableWebSocketServer } from '@dr-js/core/module/node/server/WebSocket/WebSocketServer'
 import { createUpdateRequestListener } from '@dr-js/core/module/node/server/WebSocket/WebSocketUpgradeRequest'
 
-import { configureFeaturePack as configureFeaturePackAuth } from '@dr-js/node/module/server/feature/Auth/configureFeaturePack'
-import { configureFeaturePack as configureFeaturePackPermission } from '@dr-js/node/module/server/feature/Permission/configureFeaturePack'
-import { configureFeaturePack as configureFeaturePackExplorer } from '@dr-js/node/module/server/feature/Explorer/configureFeaturePack'
-import { configureFeaturePack as configureFeaturePackWebSocketTunnel } from '@dr-js/node/module/server/feature/WebSocketTunnelDev/configureFeaturePack'
+import { setupActionMap as setupActionMapStatus, ACTION_CORE_MAP as ACTION_CORE_MAP_STATUS, ACTION_TYPE as ACTION_TYPE_STATUS } from '@dr-js/node/module/module/ActionJSON/status'
+import { setupActionMap as setupActionMapPath, ACTION_CORE_MAP as ACTION_CORE_MAP_PATH } from '@dr-js/node/module/module/ActionJSON/path'
+import { ACTION_CORE_MAP as ACTION_CORE_MAP_PATH_EXTRA_ARCHIVE } from '@dr-js/node/module/module/ActionJSON/pathExtraArchive'
 
-const PUBLIC_CACHE_FILE_SIZE_MAX = 1024 * 1024 // in byte, 1MB
-const PUBLIC_CACHE_EXPIRE_TIME = 5 * 60 * 1000 // 5min, in msec
-const FRAME_LENGTH_LIMIT = 32 * 1024 * 1024 // 32 MiB
+import { setup as setupAuth } from '@dr-js/node/module/server/feature/Auth/setup'
+import { setup as setupPermission } from '@dr-js/node/module/server/feature/Permission/setup'
+import { setup as setupActionJSON } from '@dr-js/node/module/server/feature/ActionJSON/setup'
+import { setup as setupFile } from '@dr-js/node/module/server/feature/File/setup'
+import { setup as setupExplorer } from '@dr-js/node/module/server/feature/Explorer/setup'
+import { setup as setupWebSocketTunnel } from '@dr-js/node/module/server/feature/WebSocketTunnelDev/setup'
 
+import { setupActionMap as setupActionMapWeblog } from 'source/module/ActionJSON/weblog'
+import { setup as setupWeblog } from 'source/server/feature/Weblog/setup'
+
+const PATH_PUBLIC = 'file/[PUBLIC]/'
 const PATH_TEMP = 'file/[TEMP]/'
 
-const configureServer = async ({
-  serverPack: { server, option }, logger, routePrefix = '',
+// NOTE: this is a highly customized server
+//   providing public weblog and explorer, and optional webSocketTunnelHost
+// the file structure:
+//   root/ (fileRootPath)
+//     file/
+//       [TEMP]/ (fileUploadMergePath)
+//       [PUBLIC]/ (fileRootPathPublic & weblogRootPath)
+//         index.html
+//         t/*.md
 
-  rootPath,
-  tempPath = resolve(rootPath, PATH_TEMP),
+const autoPathOption = ({
+  rootPath, // normally just set this
+
+  fileRootPath = rootPath,
+  fileRootPathPublic = resolve(fileRootPath, PATH_PUBLIC),
+  fileUploadMergePath = resolve(fileRootPath, PATH_TEMP),
+
+  weblogRootPath = fileRootPathPublic,
+  // weblogRouteIndex, weblogRouteRoot, weblogIndexTitle
+
+  ...extra
+}) => ({
+  fileRootPath,
+  fileRootPathPublic,
+  fileUploadMergePath,
+
+  weblogRootPath,
+  ...extra
+})
+
+const configureServer = async ({
+  serverExot, logger, routePrefix = '',
 
   authKey,
   authSkip,
   authFile,
   authFileGroupPath, authFileGroupDefaultTag, authFileGroupKeySuffix,
-  webSocketTunnelHost
+
+  fileRootPath, fileRootPathPublic, fileUploadMergePath,
+
+  webSocketTunnelHost,
+
+  weblogRootPath, weblogRouteIndex, weblogRouteRoot, weblogIndexTitle
 }) => {
-  const PATH_EXPLORER = rootPath
-  const PATH_EXPLORER_UPLOAD_MERGE = tempPath
-  const PATH_PUBLIC = resolve(rootPath, 'file/[PUBLIC]/')
+  await createDirectory(fileRootPath)
+  await createDirectory(fileRootPathPublic)
+  await createDirectory(fileUploadMergePath)
 
-  await createDirectory(PATH_PUBLIC)
-
-  const URL_AUTH_CHECK = '/a'
-  const URL_STATIC = '/s' // relative to PATH_PUBLIC
-  const URL_INDEX = `${URL_STATIC}/index.html`
-
-  const featureAuth = await configureFeaturePackAuth({
+  const featureAuth = await setupAuth({
     logger, routePrefix,
     authKey,
     authSkip,
     authFile,
-    authFileGroupPath, authFileGroupDefaultTag, authFileGroupKeySuffix,
-    URL_AUTH_CHECK
+    authFileGroupPath, authFileGroupDefaultTag, authFileGroupKeySuffix
   })
-  const featurePermission = await configureFeaturePackPermission({
+  const featurePermission = await setupPermission({
     logger, routePrefix,
     permissionType: 'allow'
   })
-
-  const featureExplorer = await configureFeaturePackExplorer({
+  const featureActionJSON = fileRootPath && await setupActionJSON({
     logger, routePrefix, featureAuth, featurePermission,
-    explorerRootPath: PATH_EXPLORER,
-    explorerUploadMergePath: PATH_EXPLORER_UPLOAD_MERGE
+    actionMap: {
+      ...setupActionMapWeblog({ weblogRootPath, weblogRouteIndex, weblogRouteRoot, weblogIndexTitle, logger }),
+      ...setupActionMapStatus({ rootPath: fileRootPath, logger }),
+      ...setupActionMapPath({ rootPath: fileRootPath, logger, actionCoreMap: { ...ACTION_CORE_MAP_PATH, ...ACTION_CORE_MAP_PATH_EXTRA_ARCHIVE } })
+    },
+    actionMapPublic: {
+      ...setupActionMapStatus({ rootPath: fileRootPath, logger, actionCoreMap: objectPickKey(ACTION_CORE_MAP_STATUS, [ ACTION_TYPE_STATUS.STATUS_TIMESTAMP, ACTION_TYPE_STATUS.STATUS_TIME_ISO ]) })
+    }
   })
-
-  const featureWebSocketTunnel = webSocketTunnelHost && await configureFeaturePackWebSocketTunnel({
-    logger, routePrefix, featureAuth: await configureFeaturePackAuth({ // TODO: NOTE: allow setting with a different auth priority
+  const featureFile = fileRootPath && await setupFile({
+    logger, routePrefix, featureAuth, featurePermission,
+    fileRootPath, fileRootPathPublic, fileUploadMergePath
+  })
+  const featureExplorer = await setupExplorer({
+    logger, routePrefix, featureAuth, featureActionJSON, featureFile
+  })
+  const featureWebSocketTunnel = webSocketTunnelHost && await setupWebSocketTunnel({
+    logger, routePrefix, featureAuth: await setupAuth({ // TODO: NOTE: allow setting with a different auth priority
       logger, routePrefix,
+      authKey,
       authSkip: !authFileGroupPath && !authFile, // last
       authFile: !authFileGroupPath && authFile, // second
-      authFileGroupPath, authFileGroupDefaultTag, authFileGroupKeySuffix, // first
-      URL_AUTH_CHECK
+      authFileGroupPath, authFileGroupDefaultTag, authFileGroupKeySuffix // first
     }),
     webSocketTunnelHost
   })
+  const featureWeblog = await setupWeblog({
+    logger, routePrefix, featureAuth, featureActionJSON, featureFile,
+    weblogRootPath, weblogRouteIndex, weblogRouteRoot, weblogIndexTitle
+  })
+
+  serverExot.featureMap = new Map() // fill serverExot.featureMap
+  let featureUrl
+  const featureRouteList = []
+  const featureWebSocketRouteList = []
+  const appendFeature = (feature) => {
+    if (!feature) return
+    serverExot.featureMap.set(feature.name, feature)
+    if (!featureUrl) featureUrl = feature.URL_HTML
+    if (feature.routeList) featureRouteList.push(...feature.routeList)
+    if (feature.webSocketRouteList) featureWebSocketRouteList.push(...feature.webSocketRouteList)
+  }
+  appendFeature(featureAuth)
+  appendFeature(featurePermission)
+  appendFeature(featureActionJSON)
+  appendFeature(featureFile)
+  appendFeature(featureExplorer)
+  appendFeature(featureWebSocketTunnel)
+  appendFeature(featureWeblog)
 
   const responderLogEnd = createResponderLogEnd({ log: logger.add })
 
-  const fromStaticRoot = createPathPrefixLock(PATH_PUBLIC)
-  const getParamFilePath = (store) => fromStaticRoot(decodeURIComponent(getRouteParamAny(store)))
-  const responderServeStatic = createResponderServeStatic({ sizeSingleMax: PUBLIC_CACHE_FILE_SIZE_MAX, expireTime: PUBLIC_CACHE_EXPIRE_TIME })
-
   const routeMap = createRouteMap([
-    ...featureAuth.routeList,
-    ...featureExplorer.routeList,
-    [ `${URL_STATIC}/*`, 'GET', (store) => responderServeStatic(store, getParamFilePath(store)) ],
-    [ '/', 'GET', (store) => responderEndWithRedirect(store, { redirectUrl: URL_INDEX }) ],
-    [ [ '/favicon', '/favicon.ico' ], 'GET', createResponderFavicon() ]
+    ...featureRouteList,
+    [ '/', 'GET', (store) => responderEndWithRedirect(store, { redirectUrl: featureWeblog.URL_HTML_INDEX }) ],
+    [ [ '/favicon', '/favicon.ico' ], 'GET', createResponderFavicon() ],
+    [ '/robots.txt', 'GET', createResponderRobotsTxt() ]
   ].filter(Boolean))
 
-  server.on('request', createRequestListener({
+  serverExot.server.on('request', createRequestListener({
     responderList: [
       createResponderLog({ log: logger.add }),
-      createResponderRouter({ routeMap, baseUrl: option.baseUrl })
+      createResponderRouter({ routeMap, baseUrl: serverExot.option.baseUrl })
     ],
     responderEnd: (store) => {
       responderEnd(store)
@@ -102,15 +162,14 @@ const configureServer = async ({
 
   if (featureWebSocketTunnel) { // setup WebSocket
     const routeMap = createRouteMap([
-      ...(featureWebSocketTunnel ? featureWebSocketTunnel.webSocketRouteList : [])
+      ...featureWebSocketRouteList
     ])
-    enableWebSocketServer({
-      server,
-      frameLengthLimit: FRAME_LENGTH_LIMIT,
+    serverExot.webSocketSet = enableWebSocketServer({ // fill `serverExot.webSocketSet`
+      server: serverExot.server,
       onUpgradeRequest: createUpdateRequestListener({
         responderList: [
           createResponderLog({ log: logger.add }),
-          createResponderRouter({ routeMap, baseUrl: option.baseUrl })
+          createResponderRouter({ routeMap, baseUrl: serverExot.option.baseUrl })
         ]
       })
     })
@@ -123,7 +182,9 @@ const createResponderFavicon = () => {
   return (store) => responderSendBufferCompress(store, faviconBufferData)
 }
 
-export {
-  PATH_TEMP,
-  configureServer
+const createResponderRobotsTxt = () => {
+  const faviconBufferData = prepareBufferData(Buffer.from('User-agent: *\nDisallow:'), BASIC_EXTENSION_MAP.txt)
+  return (store) => responderSendBufferCompress(store, faviconBufferData)
 }
+
+export { autoPathOption, configureServer }

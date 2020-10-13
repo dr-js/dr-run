@@ -5,13 +5,21 @@
 
 #### Export Path
 + 📄 [source/configureServer.js](source/configureServer.js)
-  - `PATH_TEMP`, `configureServer`
+  - `autoPathOption`, `configureServer`
 + 📄 [source/option.js](source/option.js)
   - `MODE_NAME_LIST`, `formatUsage`, `parseOption`
-+ 📄 [source/markdown/Marked.js](source/markdown/Marked.js)
-  - `Marked`, `highlightStyleString`
-+ 📄 [source/markdown/generateMarkdownHTML.js](source/markdown/generateMarkdownHTML.js)
-  - `generateMarkdownHTML`
++ 📄 [source/module/ActionJSON/weblog.js](source/module/ActionJSON/weblog.js)
+  - `ACTION_CORE_MAP`, `ACTION_TYPE`, `setupActionMap`
++ 📄 [source/module/WeblogMarkdown/external.js](source/module/WeblogMarkdown/external.js)
+  - `Marked`, `highlightMarkdownToHTML`, `highlightStyleString`
++ 📄 [source/module/WeblogMarkdown/generate.js](source/module/WeblogMarkdown/generate.js)
+  - `generateWeblogFromPath`
++ 📄 [source/server/feature/Weblog/HTML.js](source/server/feature/Weblog/HTML.js)
+  - `getHTML`
++ 📄 [source/server/feature/Weblog/option.js](source/server/feature/Weblog/option.js)
+  - `WeblogFormatConfig`, `getWeblogOption`
++ 📄 [source/server/feature/Weblog/setup.js](source/server/feature/Weblog/setup.js)
+  - `setup`
 
 #### Bin Option Format
 📄 [source/option.js](source/option.js)
@@ -36,9 +44,7 @@
 >       --TLS-dhparam [ARGUMENT=1]
 >           pathOrBuffer; Diffie-Hellman Key Exchange, generate with: "openssl dhparam -dsaparam -outform PEM -out output/path/dh4096.pem 4096"
 >     --root-path [ARGUMENT=1]
->         directory to use as server root
->     --temp-path [ARGUMENT=1]
->         directory to save temp file, default to "root/file/[TEMP]/"
+>         directory to use as server root, will auto set File and Weblog path
 >     --log-path [ARGUMENT=1]
 >       --log-file-prefix [ARGUMENT=1]
 >     --pid-file [ARGUMENT=1]
@@ -52,10 +58,17 @@
 >     --auth-file-group-path [ARGUMENT=1]
 >       --auth-file-group-default-tag [ARGUMENT=1]
 >       --auth-file-group-key-suffix [ARGUMENT=1]
+>     --file-root-path [ARGUMENT=1]
+>       --file-root-path-public [ARGUMENT=1]
+>       --file-upload-merge-path [ARGUMENT=1]
 >     --websocket-tunnel-host [ARGUMENT=1]
 >         [under DEV] use format: "hostname:port", default hostname: 127.0.0.1
->   --generate-markdown --G -G [OPTIONAL] [ARGUMENT=1]
->       expect root-path, load Markdown and generate server Weblog & index
+>     --weblog-root-path [ARGUMENT=1]
+>       --weblog-route-index [ARGUMENT=1]
+>       --weblog-route-root [ARGUMENT=1]
+>       --weblog-index-title [ARGUMENT=1]
+>   --generate-weblog --G -G [OPTIONAL] [ARGUMENT=0+]
+>       expect "root-path" or "weblog-root-path", load and generate server Weblog & index file
 > ENV Usage:
 >   "
 >     #!/usr/bin/env bash
@@ -66,7 +79,6 @@
 >     export DR_RUN_TLS_SNI_CONFIG="[ARGUMENT=1]"
 >     export DR_RUN_TLS_DHPARAM="[ARGUMENT=1]"
 >     export DR_RUN_ROOT_PATH="[ARGUMENT=1]"
->     export DR_RUN_TEMP_PATH="[ARGUMENT=1]"
 >     export DR_RUN_LOG_PATH="[ARGUMENT=1]"
 >     export DR_RUN_LOG_FILE_PREFIX="[ARGUMENT=1]"
 >     export DR_RUN_PID_FILE="[ARGUMENT=1]"
@@ -77,8 +89,15 @@
 >     export DR_RUN_AUTH_FILE_GROUP_PATH="[ARGUMENT=1]"
 >     export DR_RUN_AUTH_FILE_GROUP_DEFAULT_TAG="[ARGUMENT=1]"
 >     export DR_RUN_AUTH_FILE_GROUP_KEY_SUFFIX="[ARGUMENT=1]"
+>     export DR_RUN_FILE_ROOT_PATH="[ARGUMENT=1]"
+>     export DR_RUN_FILE_ROOT_PATH_PUBLIC="[ARGUMENT=1]"
+>     export DR_RUN_FILE_UPLOAD_MERGE_PATH="[ARGUMENT=1]"
 >     export DR_RUN_WEBSOCKET_TUNNEL_HOST="[ARGUMENT=1]"
->     export DR_RUN_GENERATE_MARKDOWN="[OPTIONAL] [ARGUMENT=1]"
+>     export DR_RUN_WEBLOG_ROOT_PATH="[ARGUMENT=1]"
+>     export DR_RUN_WEBLOG_ROUTE_INDEX="[ARGUMENT=1]"
+>     export DR_RUN_WEBLOG_ROUTE_ROOT="[ARGUMENT=1]"
+>     export DR_RUN_WEBLOG_INDEX_TITLE="[ARGUMENT=1]"
+>     export DR_RUN_GENERATE_WEBLOG="[OPTIONAL] [ARGUMENT=0+]"
 >   "
 > CONFIG Usage:
 >   {
@@ -89,7 +108,6 @@
 >     "TLSSNIConfig": [ "[ARGUMENT=1]" ],
 >     "TLSDhparam": [ "[ARGUMENT=1]" ],
 >     "rootPath": [ "[ARGUMENT=1]" ],
->     "tempPath": [ "[ARGUMENT=1]" ],
 >     "logPath": [ "[ARGUMENT=1]" ],
 >     "logFilePrefix": [ "[ARGUMENT=1]" ],
 >     "pidFile": [ "[ARGUMENT=1]" ],
@@ -100,7 +118,14 @@
 >     "authFileGroupPath": [ "[ARGUMENT=1]" ],
 >     "authFileGroupDefaultTag": [ "[ARGUMENT=1]" ],
 >     "authFileGroupKeySuffix": [ "[ARGUMENT=1]" ],
+>     "fileRootPath": [ "[ARGUMENT=1]" ],
+>     "fileRootPathPublic": [ "[ARGUMENT=1]" ],
+>     "fileUploadMergePath": [ "[ARGUMENT=1]" ],
 >     "websocketTunnelHost": [ "[ARGUMENT=1]" ],
->     "generateMarkdown": [ "[OPTIONAL] [ARGUMENT=1]" ],
+>     "weblogRootPath": [ "[ARGUMENT=1]" ],
+>     "weblogRouteIndex": [ "[ARGUMENT=1]" ],
+>     "weblogRouteRoot": [ "[ARGUMENT=1]" ],
+>     "weblogIndexTitle": [ "[ARGUMENT=1]" ],
+>     "generateWeblog": [ "[OPTIONAL] [ARGUMENT=0+]" ],
 >   }
 > ```

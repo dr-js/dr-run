@@ -45,8 +45,8 @@ runMain(async (logger) => {
   isTest && logger.padLog('lint source')
   isTest && execShell('npm run lint')
   isTest && await processOutput({ logger }) // once more
-  // isTest && logger.padLog('test output')
-  // isTest && execShell('npm run test-output')
+  isTest && logger.padLog('test source')
+  isTest && execShell('npm run test-source')
   await clearOutput({ fromOutput, logger })
   await verifyOutputBin({ fromOutput, packageJSON, logger })
   isTest && await verifyGitStatusClean({ fromRoot, logger })

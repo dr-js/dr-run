@@ -1,24 +1,26 @@
 import { Preset, prepareOption } from '@dr-js/core/module/node/module/Option/preset'
-import { getServerPackFormatConfig, LogFormatConfig, PidFormatConfig } from '@dr-js/node/module/server/share/option'
+import { getServerExotFormatConfig, LogFormatConfig, PidFormatConfig } from '@dr-js/node/module/server/share/option'
 import { AuthCommonFormatConfig, AuthSkipFormatConfig, AuthFileFormatConfig, AuthFileGroupFormatConfig } from '@dr-js/node/module/server/feature/Auth/option'
+import { FileFormatConfig } from '@dr-js/node/module/server/feature/File/option'
 import { WebSocketTunnelFormatConfig } from '@dr-js/node/module/server/feature/WebSocketTunnelDev/option'
 
-import { PATH_TEMP } from './configureServer'
+import { WeblogFormatConfig } from 'source/server/feature/Weblog/option'
 
 const { Config, parseCompactList } = Preset
 
 const MODE_FORMAT_LIST = [
-  getServerPackFormatConfig([
+  getServerExotFormatConfig([
     ...parseCompactList(
-      'root-path/SP|directory to use as server root',
-      `temp-path/SP,O|directory to save temp file, default to "root/${PATH_TEMP}"`
+      'root-path/SP|directory to use as server root, will auto set File and Weblog path'
     ),
     LogFormatConfig,
     PidFormatConfig,
     AuthCommonFormatConfig, AuthSkipFormatConfig, AuthFileFormatConfig, AuthFileGroupFormatConfig,
-    WebSocketTunnelFormatConfig
+    FileFormatConfig,
+    WebSocketTunnelFormatConfig,
+    WeblogFormatConfig
   ]),
-  ...parseCompactList('generate-markdown,G/SP,O|expect root-path, load Markdown and generate server Weblog & index')
+  ...parseCompactList('generate-weblog,G/T|expect "root-path" or "weblog-root-path", load and generate server Weblog & index file')
 ]
 const MODE_NAME_LIST = MODE_FORMAT_LIST.map(({ name }) => name)
 
