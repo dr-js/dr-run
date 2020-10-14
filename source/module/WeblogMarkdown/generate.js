@@ -103,14 +103,11 @@ const processFile = async (file, weblogRouteRoot, log) => {
       hasCode ? highlightStyleString : ''
     ],
     [
-      // Marked(`# ${metaTitle}`),
-      // Marked(`###### ${metaEditLogString} ${metaKeywords || ''}`),
-      // metaDescription && Marked(`###### ${metaDescription}`),
       Marked([
         `# ${metaTitle}`,
-        `> ${metaEditLogFullString}  `,
+        `> ${metaEditLogFullString}  `, // NOTE: 2 extra space for line-break
         metaKeywords && `> ${metaKeywords}  `,
-        metaDescription && `> ${metaDescription}  `,
+        metaDescription && `> \`${metaDescription}\`  `,
         headerLinkListString
       ].filter(Boolean).join('\n')),
       Marked.parser(Object.assign(tokenData, { links: tokenData.links }))
