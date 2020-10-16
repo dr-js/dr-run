@@ -8,7 +8,7 @@ import { getHTML } from './HTML'
 
 const setup = async ({
   name = 'feature:weblog',
-  logger, routePrefix = '',
+  loggerExot, routePrefix = '',
   featureAuth: { URL_AUTH_CHECK_ABBR },
   featureActionJSON: { actionMap, URL_ACTION_JSON_ABBR }, // need `PATH_*` & `STATUS_SERVER_COMMON` action
   featureFile: { fileRootPathPublic, URL_FILE_SERVE_PUBLIC_ABBR },

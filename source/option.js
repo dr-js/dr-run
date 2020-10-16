@@ -1,8 +1,8 @@
 import { Preset, prepareOption } from '@dr-js/core/module/node/module/Option/preset'
-import { getServerExotFormatConfig, LogFormatConfig, PidFormatConfig } from '@dr-js/node/module/server/share/option'
 import { AuthCommonFormatConfig, AuthSkipFormatConfig, AuthFileFormatConfig, AuthFileGroupFormatConfig } from '@dr-js/node/module/server/feature/Auth/option'
 import { FileFormatConfig } from '@dr-js/node/module/server/feature/File/option'
 import { WebSocketTunnelFormatConfig } from '@dr-js/node/module/server/feature/WebSocketTunnelDev/option'
+import { getServerExotFormatConfig, LogFormatConfig, PidFormatConfig } from '@dr-js/node/module/server/share/option'
 
 import { WeblogFormatConfig } from 'source/server/feature/Weblog/option'
 

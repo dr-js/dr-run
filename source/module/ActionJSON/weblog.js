@@ -22,12 +22,12 @@ const setupActionMap = ({
   weblogRouteIndex,
   weblogRouteRoot,
   weblogIndexTitle,
-  logger
+  loggerExot
 }) => {
-  const option = { log: logger.add, weblogRootPath, weblogRouteIndex, weblogRouteRoot, weblogIndexTitle }
+  const option = { log: loggerExot.add, weblogRootPath, weblogRouteIndex, weblogRouteRoot, weblogIndexTitle }
 
   return objectMap(actionCoreMap, (actionFunc, actionType) => async (store, actionPayload) => {
-    logger.add(`[ActionBox|${actionType}]`)
+    loggerExot.add(`[ActionBox|${actionType}]`)
     const { result, error } = await catchAsync(actionFunc, option) // NOTE: the call pattern
     return error ? { actionType, error: String(error) } : { actionType, ...result }
   })
