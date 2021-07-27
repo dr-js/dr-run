@@ -26,11 +26,13 @@
 > ```
 > CLI Usage:
 >   --config --c -c [OPTIONAL] [ARGUMENT=1]
->       from ENV: set to "env" to enable, default not use
 >       from JS/JSON: set to "path/to/config.js|json"
->   --help --h -h [OPTIONAL] [ARGUMENT=0+]
+>       from ENV: set to "env" to enable, default not check env
+>       from ENV JSON: set to "json-env:ENV_NAME" to read the ENV string as JSON, or "jz64/jb64-env"
+>       from CLI JSON: set to "json-cli:JSON_STRING" to read the appended string as JSON, or "jz64/jb64-cli"
+>   --help --h -h [OPTIONAL] [ARGUMENT=0-1]
 >       show full help
->   --version --v -v [OPTIONAL] [ARGUMENT=0+]
+>   --version --v -v [OPTIONAL] [ARGUMENT=0-1]
 >       show version
 >   --host --H -H [OPTIONAL] [ARGUMENT=1]
 >       set "hostname:port"
@@ -48,12 +50,12 @@
 >     --log-path [ARGUMENT=1]
 >       --log-file-prefix [ARGUMENT=1]
 >     --pid-file [ARGUMENT=1]
->       --pid-ignore-exist [ARGUMENT=0+]
->           set to enable
+>       --pid-ignore-exist [ARGUMENT=0-1]
+>           set to ANY value to enable, except "false/no/n/0"
 >     --auth-key [ARGUMENT=1]
 >         set for non-default key
->     --auth-skip [ARGUMENT=0+]
->         set to enable
+>     --auth-skip [ARGUMENT=0-1]
+>         set to ANY value to enable, except "false/no/n/0"
 >     --auth-file [ARGUMENT=1]
 >     --auth-file-group-path [ARGUMENT=1]
 >       --auth-file-group-default-tag [ARGUMENT=1]
@@ -67,14 +69,14 @@
 >       --weblog-route-index [ARGUMENT=1]
 >       --weblog-route-root [ARGUMENT=1]
 >       --weblog-index-title [ARGUMENT=1]
->   --generate-weblog --G -G [OPTIONAL] [ARGUMENT=0+]
+>   --generate-weblog --G -G [OPTIONAL] [ARGUMENT=0-1]
 >       expect "root-path" or "weblog-root-path", load and generate server Weblog & index file
 > ENV Usage:
 >   "
 >     #!/usr/bin/env bash
 >     export DR_RUN_CONFIG="[OPTIONAL] [ARGUMENT=1]"
->     export DR_RUN_HELP="[OPTIONAL] [ARGUMENT=0+]"
->     export DR_RUN_VERSION="[OPTIONAL] [ARGUMENT=0+]"
+>     export DR_RUN_HELP="[OPTIONAL] [ARGUMENT=0-1]"
+>     export DR_RUN_VERSION="[OPTIONAL] [ARGUMENT=0-1]"
 >     export DR_RUN_HOST="[OPTIONAL] [ARGUMENT=1]"
 >     export DR_RUN_TLS_SNI_CONFIG="[ARGUMENT=1]"
 >     export DR_RUN_TLS_DHPARAM="[ARGUMENT=1]"
@@ -82,9 +84,9 @@
 >     export DR_RUN_LOG_PATH="[ARGUMENT=1]"
 >     export DR_RUN_LOG_FILE_PREFIX="[ARGUMENT=1]"
 >     export DR_RUN_PID_FILE="[ARGUMENT=1]"
->     export DR_RUN_PID_IGNORE_EXIST="[ARGUMENT=0+]"
+>     export DR_RUN_PID_IGNORE_EXIST="[ARGUMENT=0-1]"
 >     export DR_RUN_AUTH_KEY="[ARGUMENT=1]"
->     export DR_RUN_AUTH_SKIP="[ARGUMENT=0+]"
+>     export DR_RUN_AUTH_SKIP="[ARGUMENT=0-1]"
 >     export DR_RUN_AUTH_FILE="[ARGUMENT=1]"
 >     export DR_RUN_AUTH_FILE_GROUP_PATH="[ARGUMENT=1]"
 >     export DR_RUN_AUTH_FILE_GROUP_DEFAULT_TAG="[ARGUMENT=1]"
@@ -97,13 +99,13 @@
 >     export DR_RUN_WEBLOG_ROUTE_INDEX="[ARGUMENT=1]"
 >     export DR_RUN_WEBLOG_ROUTE_ROOT="[ARGUMENT=1]"
 >     export DR_RUN_WEBLOG_INDEX_TITLE="[ARGUMENT=1]"
->     export DR_RUN_GENERATE_WEBLOG="[OPTIONAL] [ARGUMENT=0+]"
+>     export DR_RUN_GENERATE_WEBLOG="[OPTIONAL] [ARGUMENT=0-1]"
 >   "
 > CONFIG Usage:
 >   {
 >     "config": [ "[OPTIONAL] [ARGUMENT=1]" ],
->     "help": [ "[OPTIONAL] [ARGUMENT=0+]" ],
->     "version": [ "[OPTIONAL] [ARGUMENT=0+]" ],
+>     "help": [ "[OPTIONAL] [ARGUMENT=0-1]" ],
+>     "version": [ "[OPTIONAL] [ARGUMENT=0-1]" ],
 >     "host": [ "[OPTIONAL] [ARGUMENT=1]" ],
 >     "TLSSNIConfig": [ "[ARGUMENT=1]" ],
 >     "TLSDhparam": [ "[ARGUMENT=1]" ],
@@ -111,9 +113,9 @@
 >     "logPath": [ "[ARGUMENT=1]" ],
 >     "logFilePrefix": [ "[ARGUMENT=1]" ],
 >     "pidFile": [ "[ARGUMENT=1]" ],
->     "pidIgnoreExist": [ "[ARGUMENT=0+]" ],
+>     "pidIgnoreExist": [ "[ARGUMENT=0-1]" ],
 >     "authKey": [ "[ARGUMENT=1]" ],
->     "authSkip": [ "[ARGUMENT=0+]" ],
+>     "authSkip": [ "[ARGUMENT=0-1]" ],
 >     "authFile": [ "[ARGUMENT=1]" ],
 >     "authFileGroupPath": [ "[ARGUMENT=1]" ],
 >     "authFileGroupDefaultTag": [ "[ARGUMENT=1]" ],
@@ -126,6 +128,6 @@
 >     "weblogRouteIndex": [ "[ARGUMENT=1]" ],
 >     "weblogRouteRoot": [ "[ARGUMENT=1]" ],
 >     "weblogIndexTitle": [ "[ARGUMENT=1]" ],
->     "generateWeblog": [ "[OPTIONAL] [ARGUMENT=0+]" ],
+>     "generateWeblog": [ "[OPTIONAL] [ARGUMENT=0-1]" ],
 >   }
 > ```
