@@ -4,11 +4,11 @@ import { promises as fsAsync } from 'fs'
 import { escapeHTML } from '@dr-js/core/module/common/string'
 import { compareString } from '@dr-js/core/module/common/compare'
 import { COMMON_LAYOUT, COMMON_STYLE } from '@dr-js/core/module/node/server/commonHTML'
-import { PATH_TYPE, toPosixPath } from '@dr-js/core/module/node/file/Path'
-import { getDirInfoList, createDirectory } from '@dr-js/core/module/node/file/Directory'
-import { compressFileList } from '@dr-js/node/module/module/Compress'
+import { PATH_TYPE, toPosixPath } from '@dr-js/core/module/node/fs/Path'
+import { getDirInfoList, createDirectory } from '@dr-js/core/module/node/fs/Directory'
+import { compressGzBrFileAsync } from '@dr-js/core/module/node/module/Archive/function'
 
-import { getMarkdownHeaderLink } from '@dr-js/dev/module/node/export/renderMarkdown' // TODO: move to `@dr-js/node`?
+import { getMarkdownHeaderLink } from '@dr-js/dev/module/node/export/renderMarkdown'
 
 import { highlightMarkdownToHTML, highlightStyleString, Marked } from './external'
 
@@ -211,7 +211,7 @@ const generateWeblogFromPath = async ({
   log && log(`output: ${weblogRouteIndex}`)
 
   __DEV__ && console.log('[outputFileList]', outputFileList)
-  await compressFileList({ fileList: outputFileList })
+  for (const file of outputFileList) await compressGzBrFileAsync(file, `${file}.gz`)
   log && log(`compress: ${outputFileList.length} file`)
 
   return {

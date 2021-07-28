@@ -1,8 +1,8 @@
 import { Preset, prepareOption } from '@dr-js/core/module/node/module/Option/preset'
-import { AuthCommonFormatConfig, AuthSkipFormatConfig, AuthFileFormatConfig, AuthFileGroupFormatConfig } from '@dr-js/node/module/server/feature/Auth/option'
-import { FileFormatConfig } from '@dr-js/node/module/server/feature/File/option'
-import { WebSocketTunnelFormatConfig } from '@dr-js/node/module/server/feature/WebSocketTunnelDev/option'
-import { getServerExotFormatConfig, LogFormatConfig, PidFormatConfig } from '@dr-js/node/module/server/share/option'
+import { AuthCommonFormatConfig, AuthSkipFormatConfig, AuthFileFormatConfig, AuthFileGroupFormatConfig } from '@dr-js/core/module/node/server/Feature/Auth/option'
+import { FileFormatConfig } from '@dr-js/core/module/node/server/Feature/File/option'
+// import { WebSocketTunnelFormatConfig } from '@dr-js/core/module/node/server/Feature/WebSocketTunnelDev/option'
+import { getServerExotFormatConfig, LogFormatConfig, PidFormatConfig } from '@dr-js/core/module/node/server/Feature/@/option'
 
 import { WeblogFormatConfig } from 'source/server/feature/Weblog/option'
 
@@ -17,7 +17,7 @@ const MODE_FORMAT_LIST = [
     PidFormatConfig,
     AuthCommonFormatConfig, AuthSkipFormatConfig, AuthFileFormatConfig, AuthFileGroupFormatConfig,
     FileFormatConfig,
-    WebSocketTunnelFormatConfig,
+    // WebSocketTunnelFormatConfig,
     WeblogFormatConfig
   ]),
   ...parseCompactList('generate-weblog,G/T|expect "root-path" or "weblog-root-path", load and generate server Weblog & index file')

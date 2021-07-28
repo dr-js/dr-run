@@ -65,8 +65,6 @@
 >     --file-root-path [ARGUMENT=1]
 >       --file-root-path-public [ARGUMENT=1]
 >       --file-upload-merge-path [ARGUMENT=1]
->     --websocket-tunnel-host [ARGUMENT=1]
->         [under DEV] use format: "hostname:port", default hostname: 127.0.0.1
 >     --weblog-root-path [ARGUMENT=1]
 >       --weblog-route-source [ARGUMENT=1]
 >       --weblog-route-output [ARGUMENT=1]
@@ -97,7 +95,6 @@
 >     export DR_RUN_FILE_ROOT_PATH="[ARGUMENT=1]"
 >     export DR_RUN_FILE_ROOT_PATH_PUBLIC="[ARGUMENT=1]"
 >     export DR_RUN_FILE_UPLOAD_MERGE_PATH="[ARGUMENT=1]"
->     export DR_RUN_WEBSOCKET_TUNNEL_HOST="[ARGUMENT=1]"
 >     export DR_RUN_WEBLOG_ROOT_PATH="[ARGUMENT=1]"
 >     export DR_RUN_WEBLOG_ROUTE_SOURCE="[ARGUMENT=1]"
 >     export DR_RUN_WEBLOG_ROUTE_OUTPUT="[ARGUMENT=1]"
@@ -127,7 +124,6 @@
 >     "fileRootPath": [ "[ARGUMENT=1]" ],
 >     "fileRootPathPublic": [ "[ARGUMENT=1]" ],
 >     "fileUploadMergePath": [ "[ARGUMENT=1]" ],
->     "websocketTunnelHost": [ "[ARGUMENT=1]" ],
 >     "weblogRootPath": [ "[ARGUMENT=1]" ],
 >     "weblogRouteSource": [ "[ARGUMENT=1]" ],
 >     "weblogRouteOutput": [ "[ARGUMENT=1]" ],

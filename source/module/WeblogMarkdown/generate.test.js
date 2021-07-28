@@ -1,7 +1,6 @@
 import { resolve } from 'path'
-import { createDirectory, deleteDirectory } from '@dr-js/core/module/node/file/Directory'
-import { copyPath } from '@dr-js/core/module/node/file/Path'
-import { resetDirectory } from '@dr-js/dev/module/node/file'
+import { createDirectory, deleteDirectory, resetDirectory } from '@dr-js/core/module/node/fs/Directory'
+import { copyPath } from '@dr-js/core/module/node/fs/Path'
 
 import { generateWeblogFromPath } from './generate'
 

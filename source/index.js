@@ -1,13 +1,13 @@
 import { tmpdir } from 'os'
 import { resolve } from 'path'
 
-import { setupSIGUSR2 } from '@dr-js/node/module/module/RuntimeDump'
-import { getAuthCommonOption, getAuthSkipOption, getAuthFileOption, getAuthFileGroupOption } from '@dr-js/node/module/server/feature/Auth/option'
-import { getFileOption } from '@dr-js/node/module/server/feature/File/option'
-import { getExplorerOption } from '@dr-js/node/module/server/feature/Explorer/option'
-import { getWebSocketTunnelOption } from '@dr-js/node/module/server/feature/WebSocketTunnelDev/option'
-import { getServerExotOption, getLogOption, getPidOption } from '@dr-js/node/module/server/share/option'
-import { runServer } from '@dr-js/node/module/server/share/configure'
+import { setupSIGUSR2 } from '@dr-js/core/module/node/module/RuntimeDump'
+import { getAuthCommonOption, getAuthSkipOption, getAuthFileOption, getAuthFileGroupOption } from '@dr-js/core/module/node/server/Feature/Auth/option'
+import { getFileOption } from '@dr-js/core/module/node/server/Feature/File/option'
+import { getExplorerOption } from '@dr-js/core/module/node/server/Feature/Explorer/option'
+// import { getWebSocketTunnelOption } from '@dr-js/core/module/node/server/Feature/WebSocketTunnelDev/option'
+import { getServerExotOption, getLogOption, getPidOption } from '@dr-js/core/module/node/server/Feature/@/option'
+import { runServer } from '@dr-js/core/module/node/server/Feature/@/configure'
 
 import { getWeblogOption } from 'source/server/feature/Weblog/option'
 import { generateWeblogFromPath } from 'source/module/WeblogMarkdown/generate'
@@ -30,7 +30,7 @@ const runMode = async (modeName, optionData) => {
         ...getAuthCommonOption(optionData), ...getAuthSkipOption(optionData), ...getAuthFileOption(optionData), ...getAuthFileGroupOption(optionData),
         ...getFileOption(optionData),
         ...getExplorerOption(optionData),
-        ...getWebSocketTunnelOption(optionData),
+        // ...getWebSocketTunnelOption(optionData),
         ...getWeblogOption(optionData)
       }))
     case 'generate-weblog':

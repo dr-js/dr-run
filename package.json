@@ -37,7 +37,6 @@
     "@dr-js/core": "^0.4.13",
     "@dr-js/dev": "^0.4.16",
     "@dr-js/dev-web": "^0.4.16",
-    "@dr-js/node": "^0.4.9",
     "highlight.js": "^10.4.1",
     "marked": "^2.1.3"
   }
