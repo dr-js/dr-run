@@ -1,6 +1,6 @@
-import { COMMON_LAYOUT, COMMON_STYLE } from '@dr-js/core/module/node/server/commonHTML'
-import { escapeHTML } from '@dr-js/core/module/common/string'
-import { isString } from '@dr-js/core/module/common/check'
+import { COMMON_LAYOUT, COMMON_STYLE } from '@dr-js/core/module/node/server/commonHTML.js'
+import { escapeHTML } from '@dr-js/core/module/common/string.js'
+import { isString } from '@dr-js/core/module/common/check.js'
 
 const getHTML404 = ({
   URL_HTML_INDEX,

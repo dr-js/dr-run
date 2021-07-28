@@ -1,4 +1,4 @@
-import { Preset } from '@dr-js/core/module/node/module/Option/preset'
+import { Preset } from '@dr-js/core/module/node/module/Option/preset.js'
 
 const { parseCompact, parseCompactList } = Preset
 

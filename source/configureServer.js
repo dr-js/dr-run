@@ -1,30 +1,30 @@
 import { resolve } from 'path'
 import { gunzipSync } from 'zlib'
 
-import { objectPickKey } from '@dr-js/core/module/common/immutable/Object'
-import { BASIC_EXTENSION_MAP } from '@dr-js/core/module/common/module/MIME'
+import { objectPickKey } from '@dr-js/core/module/common/immutable/Object.js'
+import { BASIC_EXTENSION_MAP } from '@dr-js/core/module/common/module/MIME.js'
 
-import { createDirectory } from '@dr-js/core/module/node/fs/Directory'
-import { responderEndWithRedirect } from '@dr-js/core/module/node/server/Responder/Common'
-import { prepareBufferData, responderSendBuffer, responderSendBufferCompress } from '@dr-js/core/module/node/server/Responder/Send'
+import { createDirectory } from '@dr-js/core/module/node/fs/Directory.js'
+import { responderEndWithRedirect } from '@dr-js/core/module/node/server/Responder/Common.js'
+import { prepareBufferData, responderSendBuffer, responderSendBufferCompress } from '@dr-js/core/module/node/server/Responder/Send.js'
 
-import { setupActionMap as setupActionMapStatus, ACTION_CORE_MAP as ACTION_CORE_MAP_STATUS, ACTION_TYPE as ACTION_TYPE_STATUS } from '@dr-js/core/module/node/module/ActionJSON/status'
-import { setupActionMap as setupActionMapPath, ACTION_CORE_MAP as ACTION_CORE_MAP_PATH } from '@dr-js/core/module/node/module/ActionJSON/path'
-import { ACTION_CORE_MAP as ACTION_CORE_MAP_PATH_EXTRA_ARCHIVE } from '@dr-js/core/module/node/module/ActionJSON/pathExtraArchive'
+import { setupActionMap as setupActionMapStatus, ACTION_CORE_MAP as ACTION_CORE_MAP_STATUS, ACTION_TYPE as ACTION_TYPE_STATUS } from '@dr-js/core/module/node/module/ActionJSON/status.js'
+import { setupActionMap as setupActionMapPath, ACTION_CORE_MAP as ACTION_CORE_MAP_PATH } from '@dr-js/core/module/node/module/ActionJSON/path.js'
+import { ACTION_CORE_MAP as ACTION_CORE_MAP_PATH_EXTRA_ARCHIVE } from '@dr-js/core/module/node/module/ActionJSON/pathExtraArchive.js'
 
-import { setup as setupAuth } from '@dr-js/core/module/node/server/Feature/Auth/setup'
-import { setup as setupPermission } from '@dr-js/core/module/node/server/Feature/Permission/setup'
-import { setup as setupActionJSON } from '@dr-js/core/module/node/server/Feature/ActionJSON/setup'
-import { setup as setupFile } from '@dr-js/core/module/node/server/Feature/File/setup'
-import { setup as setupExplorer } from '@dr-js/core/module/node/server/Feature/Explorer/setup'
-// import { setup as setupWebSocketTunnel } from '@dr-js/core/module/node/server/Feature/WebSocketTunnelDev/setup'
+import { setup as setupAuth } from '@dr-js/core/module/node/server/Feature/Auth/setup.js'
+import { setup as setupPermission } from '@dr-js/core/module/node/server/Feature/Permission/setup.js'
+import { setup as setupActionJSON } from '@dr-js/core/module/node/server/Feature/ActionJSON/setup.js'
+import { setup as setupFile } from '@dr-js/core/module/node/server/Feature/File/setup.js'
+import { setup as setupExplorer } from '@dr-js/core/module/node/server/Feature/Explorer/setup.js'
+// import { setup as setupWebSocketTunnel } from '@dr-js/core/module/node/server/Feature/WebSocketTunnelDev/setup.js'
 
-import { configureFeature } from '@dr-js/core/module/node/server/Feature/@/configure'
+import { configureFeature } from '@dr-js/core/module/node/server/Feature/@/configure.js'
 
-import { setupActionMap as setupActionMapWeblog } from 'source/module/ActionJSON/weblog'
-import { setup as setupWeblog } from 'source/server/feature/Weblog/setup'
+import { setupActionMap as setupActionMapWeblog } from 'source/module/ActionJSON/weblog.js'
+import { setup as setupWeblog } from 'source/server/feature/Weblog/setup.js'
 
-import { getHTML404 } from './HTML404'
+import { getHTML404 } from './HTML404.js'
 
 const PATH_PUBLIC = 'file/[PUBLIC]/'
 const PATH_TEMP = 'file/[TEMP]/'

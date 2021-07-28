@@ -1,10 +1,10 @@
-import { Preset, prepareOption } from '@dr-js/core/module/node/module/Option/preset'
-import { AuthCommonFormatConfig, AuthSkipFormatConfig, AuthFileFormatConfig, AuthFileGroupFormatConfig } from '@dr-js/core/module/node/server/Feature/Auth/option'
-import { FileFormatConfig } from '@dr-js/core/module/node/server/Feature/File/option'
-// import { WebSocketTunnelFormatConfig } from '@dr-js/core/module/node/server/Feature/WebSocketTunnelDev/option'
-import { getServerExotFormatConfig, LogFormatConfig, PidFormatConfig } from '@dr-js/core/module/node/server/Feature/@/option'
+import { Preset, prepareOption } from '@dr-js/core/module/node/module/Option/preset.js'
+import { AuthCommonFormatConfig, AuthSkipFormatConfig, AuthFileFormatConfig, AuthFileGroupFormatConfig } from '@dr-js/core/module/node/server/Feature/Auth/option.js'
+import { FileFormatConfig } from '@dr-js/core/module/node/server/Feature/File/option.js'
+// import { WebSocketTunnelFormatConfig } from '@dr-js/core/module/node/server/Feature/WebSocketTunnelDev/option.js'
+import { getServerExotFormatConfig, LogFormatConfig, PidFormatConfig } from '@dr-js/core/module/node/server/Feature/@/option.js'
 
-import { WeblogFormatConfig } from 'source/server/feature/Weblog/option'
+import { WeblogFormatConfig } from 'source/server/feature/Weblog/option.js'
 
 const { Config, parseCompactList } = Preset
 

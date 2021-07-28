@@ -1,10 +1,10 @@
-import { BASIC_EXTENSION_MAP } from '@dr-js/core/module/common/module/MIME'
-import { responderEndWithRedirect } from '@dr-js/core/module/node/server/Responder/Common'
-import { responderSendBufferCompress, prepareBufferDataAsync } from '@dr-js/core/module/node/server/Responder/Send'
+import { BASIC_EXTENSION_MAP } from '@dr-js/core/module/common/module/MIME.js'
+import { responderEndWithRedirect } from '@dr-js/core/module/node/server/Responder/Common.js'
+import { responderSendBufferCompress, prepareBufferDataAsync } from '@dr-js/core/module/node/server/Responder/Send.js'
 
-import { ACTION_TYPE as ACTION_TYPE_WEBLOG } from 'source/module/ActionJSON/weblog'
+import { ACTION_TYPE as ACTION_TYPE_WEBLOG } from 'source/module/ActionJSON/weblog.js'
 
-import { getHTML } from './HTML'
+import { getHTML } from './HTML.js'
 
 const setup = async ({
   name = 'feature:weblog',

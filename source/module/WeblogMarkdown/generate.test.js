@@ -1,8 +1,8 @@
 import { resolve } from 'path'
-import { createDirectory, deleteDirectory, resetDirectory } from '@dr-js/core/module/node/fs/Directory'
-import { copyPath } from '@dr-js/core/module/node/fs/Path'
+import { createDirectory, deleteDirectory, resetDirectory } from '@dr-js/core/module/node/fs/Directory.js'
+import { copyPath } from '@dr-js/core/module/node/fs/Path.js'
 
-import { generateWeblogFromPath } from './generate'
+import { generateWeblogFromPath } from './generate.js'
 
 const { describe, it, before, after, info = console.log } = global
 

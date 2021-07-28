@@ -1,16 +1,16 @@
 import { resolve, join, basename, extname } from 'path'
 import { promises as fsAsync } from 'fs'
 
-import { escapeHTML } from '@dr-js/core/module/common/string'
-import { compareString } from '@dr-js/core/module/common/compare'
-import { COMMON_LAYOUT, COMMON_STYLE } from '@dr-js/core/module/node/server/commonHTML'
-import { PATH_TYPE, toPosixPath } from '@dr-js/core/module/node/fs/Path'
-import { getDirInfoList, createDirectory } from '@dr-js/core/module/node/fs/Directory'
-import { compressGzBrFileAsync } from '@dr-js/core/module/node/module/Archive/function'
+import { escapeHTML } from '@dr-js/core/module/common/string.js'
+import { compareString } from '@dr-js/core/module/common/compare.js'
+import { COMMON_LAYOUT, COMMON_STYLE } from '@dr-js/core/module/node/server/commonHTML.js'
+import { PATH_TYPE, toPosixPath } from '@dr-js/core/module/node/fs/Path.js'
+import { getDirInfoList, createDirectory } from '@dr-js/core/module/node/fs/Directory.js'
+import { compressGzBrFileAsync } from '@dr-js/core/module/node/module/Archive/function.js'
 
-import { getMarkdownHeaderLink } from '@dr-js/dev/module/node/export/renderMarkdown'
+import { getMarkdownHeaderLink } from '@dr-js/dev/module/node/export/renderMarkdown.js'
 
-import { highlightMarkdownToHTML, highlightStyleString, Marked } from './external'
+import { highlightMarkdownToHTML, highlightStyleString, Marked } from './external.js'
 
 const joinText = (...args) => args.filter(Boolean).join('\n')
 

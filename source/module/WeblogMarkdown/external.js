@@ -1,17 +1,17 @@
-import { getRandomId } from '@dr-js/core/module/common/math/random'
+import { getRandomId } from '@dr-js/core/module/common/math/random.js'
 
 import Marked from 'marked'
 
-import { registerLanguage, highlight } from 'highlight.js/lib/core'
-import bash from 'highlight.js/lib/languages/bash'
-import css from 'highlight.js/lib/languages/css'
-import diff from 'highlight.js/lib/languages/diff'
-import javascript from 'highlight.js/lib/languages/javascript'
-import json from 'highlight.js/lib/languages/json'
-import lisp from 'highlight.js/lib/languages/lisp'
-import markdown from 'highlight.js/lib/languages/markdown'
-import nginx from 'highlight.js/lib/languages/nginx'
-import plaintext from 'highlight.js/lib/languages/plaintext'
+import { registerLanguage, highlight } from 'highlight.js/lib/core.js'
+import bash from 'highlight.js/lib/languages/bash.js'
+import css from 'highlight.js/lib/languages/css.js'
+import diff from 'highlight.js/lib/languages/diff.js'
+import javascript from 'highlight.js/lib/languages/javascript.js'
+import json from 'highlight.js/lib/languages/json.js'
+import lisp from 'highlight.js/lib/languages/lisp.js'
+import markdown from 'highlight.js/lib/languages/markdown.js'
+import nginx from 'highlight.js/lib/languages/nginx.js'
+import plaintext from 'highlight.js/lib/languages/plaintext.js'
 
 const HIGHLIGHT_LANGUAGE_MAP = {
   bash, shell: bash, // for now "shell script" will match just "shell"

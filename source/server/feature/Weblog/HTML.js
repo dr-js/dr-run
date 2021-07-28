@@ -1,9 +1,9 @@
-import { COMMON_LAYOUT, COMMON_STYLE, COMMON_SCRIPT } from '@dr-js/core/module/node/server/commonHTML'
-import { DR_BROWSER_SCRIPT_TAG } from '@dr-js/core/module/node/resource'
+import { COMMON_LAYOUT, COMMON_STYLE, COMMON_SCRIPT } from '@dr-js/core/module/node/server/commonHTML.js'
+import { DR_BROWSER_SCRIPT_TAG } from '@dr-js/core/module/node/resource.js'
 
-import { initModal } from '@dr-js/core/module/node/server/Feature/@/HTML/Modal'
-import { initLoadingMask } from '@dr-js/core/module/node/server/Feature/@/HTML/LoadingMask'
-import { initAuthMask } from '@dr-js/core/module/node/server/Feature/Auth/HTML'
+import { initModal } from '@dr-js/core/module/node/server/Feature/@/HTML/Modal.js'
+import { initLoadingMask } from '@dr-js/core/module/node/server/Feature/@/HTML/LoadingMask.js'
+import { initAuthMask } from '@dr-js/core/module/node/server/Feature/Auth/HTML.js'
 
 const getHTML = ({
   URL_AUTH_CHECK_ABBR, URL_ACTION_JSON_ABBR,

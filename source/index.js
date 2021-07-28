@@ -1,19 +1,19 @@
 import { tmpdir } from 'os'
 import { resolve } from 'path'
 
-import { setupSIGUSR2 } from '@dr-js/core/module/node/module/RuntimeDump'
-import { getAuthCommonOption, getAuthSkipOption, getAuthFileOption, getAuthFileGroupOption } from '@dr-js/core/module/node/server/Feature/Auth/option'
-import { getFileOption } from '@dr-js/core/module/node/server/Feature/File/option'
-import { getExplorerOption } from '@dr-js/core/module/node/server/Feature/Explorer/option'
-// import { getWebSocketTunnelOption } from '@dr-js/core/module/node/server/Feature/WebSocketTunnelDev/option'
-import { getServerExotOption, getLogOption, getPidOption } from '@dr-js/core/module/node/server/Feature/@/option'
-import { runServer } from '@dr-js/core/module/node/server/Feature/@/configure'
+import { setupSIGUSR2 } from '@dr-js/core/module/node/module/RuntimeDump.js'
+import { getAuthCommonOption, getAuthSkipOption, getAuthFileOption, getAuthFileGroupOption } from '@dr-js/core/module/node/server/Feature/Auth/option.js'
+import { getFileOption } from '@dr-js/core/module/node/server/Feature/File/option.js'
+import { getExplorerOption } from '@dr-js/core/module/node/server/Feature/Explorer/option.js'
+// import { getWebSocketTunnelOption } from '@dr-js/core/module/node/server/Feature/WebSocketTunnelDev/option.js'
+import { getServerExotOption, getLogOption, getPidOption } from '@dr-js/core/module/node/server/Feature/@/option.js'
+import { runServer } from '@dr-js/core/module/node/server/Feature/@/configure.js'
 
-import { getWeblogOption } from 'source/server/feature/Weblog/option'
-import { generateWeblogFromPath } from 'source/module/WeblogMarkdown/generate'
+import { getWeblogOption } from 'source/server/feature/Weblog/option.js'
+import { generateWeblogFromPath } from 'source/module/WeblogMarkdown/generate.js'
 
-import { autoPathOption, configureServer } from './configureServer'
-import { MODE_NAME_LIST, parseOption, formatUsage } from './option'
+import { autoPathOption, configureServer } from './configureServer.js'
+import { MODE_NAME_LIST, parseOption, formatUsage } from './option.js'
 import { name as packageName, version as packageVersion } from '../package.json'
 
 const runMode = async (modeName, optionData) => {

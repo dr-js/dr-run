@@ -1,7 +1,7 @@
-import { catchAsync } from '@dr-js/core/module/common/error'
-import { objectMap } from '@dr-js/core/module/common/immutable/Object'
+import { catchAsync } from '@dr-js/core/module/common/error.js'
+import { objectMap } from '@dr-js/core/module/common/immutable/Object.js'
 
-import { generateWeblogFromPath } from 'source/module/WeblogMarkdown/generate'
+import { generateWeblogFromPath } from 'source/module/WeblogMarkdown/generate.js'
 
 const WEBLOG_GENERATE_MARKDOWN = 'weblog.generate-markdown'
 
