@@ -1,9 +1,7 @@
 name: ci-test
 
 on:
-  push:
-    branches:
-      - '**'
+  push: { branches: [ "**" ] }
 
 jobs:
   build:
@@ -13,16 +11,12 @@ jobs:
         os: [ ubuntu-latest ]
         node-version: [ 14.x, 15.x ]
 
-    runs-on: ${{ matrix.os }}
+    runs-on: "${{ matrix.os }}"
 
     steps:
-      - name: Setup Git repo
-        uses: actions/checkout@v2 # https://github.com/actions/checkout
-
-      - name: Setup Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1 # https://github.com/actions/setup-node
-        with:
-          node-version: ${{ matrix.node-version }}
+      - uses: actions/checkout@v2 # https://github.com/actions/checkout
+      - uses: actions/setup-node@v2 # https://github.com/actions/setup-node
+        with: { node-version: "${{ matrix.node-version }}" }
 
       - name: Log CI info
         run: |
@@ -31,5 +25,4 @@ jobs:
           echo "npm: $(npm -v)"
 
       - run: npm ci
-
       - run: npm test
