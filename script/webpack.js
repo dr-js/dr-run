@@ -1,17 +1,15 @@
-import { compileWithWebpack, commonFlag } from '@dr-js/dev/module/webpack.js'
-import { runMain, commonCombo } from '@dr-js/dev/module/main.js'
+const { runKit } = require('@dr-js/core/library/node/kit.js')
+const { compileWithWebpack, commonFlag } = require('@dr-js/dev/library/webpack.js')
 
-runMain(async (logger) => {
-  const { fromRoot, fromOutput } = commonCombo(logger)
+runKit(async (kit) => {
+  const { mode, isWatch, profileOutput, getCommonWebpackConfig } = await commonFlag({ kit })
 
-  const { mode, isWatch, profileOutput, getCommonWebpackConfig } = await commonFlag({ fromRoot, logger })
-
-  const config = getCommonWebpackConfig(({
+  const config = getCommonWebpackConfig({
     isNodeEnv: true,
-    output: { path: fromOutput('library'), filename: '[name].js' },
-    entry: { index: 'source/index' }
-  }))
+    output: { path: kit.fromOutput('library'), filename: '[name].js' },
+    entry: { 'index': 'source/index' }
+  })
 
-  logger.padLog(`compile with webpack mode: ${mode}, isWatch: ${Boolean(isWatch)}`)
-  await compileWithWebpack({ config, isWatch, profileOutput, logger })
+  kit.padLog(`compile with webpack mode: ${mode}, isWatch: ${Boolean(isWatch)}`)
+  await compileWithWebpack({ config, isWatch, profileOutput, kit })
 }, 'webpack')
