@@ -24,6 +24,8 @@ import { configureFeature } from '@dr-js/node/module/server/share/configure'
 import { setupActionMap as setupActionMapWeblog } from 'source/module/ActionJSON/weblog'
 import { setup as setupWeblog } from 'source/server/feature/Weblog/setup'
 
+import { getHTML404 } from './HTML404'
+
 const PATH_PUBLIC = 'file/[PUBLIC]/'
 const PATH_TEMP = 'file/[TEMP]/'
 
@@ -75,6 +77,15 @@ const configureServer = async ({
   await createDirectory(fileRootPathPublic)
   await createDirectory(fileUploadMergePath)
 
+  const responderHTML404 = (store, message = '') => responderSendBuffer(store, {
+    type: BASIC_EXTENSION_MAP.html,
+    buffer: Buffer.from(getHTML404({
+      URL_HTML_INDEX: featureWeblog.URL_HTML_INDEX,
+      sourceUrl: store.request.url,
+      message
+    }))
+  })
+
   const featureAuth = await setupAuth({
     loggerExot, routePrefix,
     authKey,
@@ -99,7 +110,11 @@ const configureServer = async ({
   })
   const featureFile = fileRootPath && await setupFile({
     loggerExot, routePrefix, featureAuth, featurePermission,
-    fileRootPath, fileRootPathPublic, fileUploadMergePath
+    fileRootPath, fileRootPathPublic, fileUploadMergePath,
+    serveConfig: {
+      responderFallbackPublic: (store, { relativePath }) => responderHTML404(store, `file not found: ${relativePath}`),
+      extraOptionPublic: { isEnableGzip: true }
+    }
   })
   const featureExplorer = await setupExplorer({
     loggerExot, routePrefix, featureAuth, featureActionJSON, featureFile
@@ -124,7 +139,9 @@ const configureServer = async ({
     rootRouteResponder: (store) => responderEndWithRedirect(store, { redirectUrl: featureWeblog.URL_HTML_INDEX }),
     preRouteList: [
       [ [ '/favicon', '/favicon.ico' ], 'GET', createResponderFavicon() ],
-      [ '/robots.txt', 'GET', createResponderRobotsTxt() ] ]
+      [ '/robots.txt', 'GET', createResponderRobotsTxt() ],
+      [ '/*', 'GET', responderHTML404 ]
+    ]
   }, [
     featureAuth,
     featurePermission,

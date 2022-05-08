@@ -4,6 +4,8 @@
 * [Bin Option Format](#bin-option-format)
 
 #### Export Path
++ 📄 [source/HTML404.js](source/HTML404.js)
+  - `getHTML404`
 + 📄 [source/configureServer.js](source/configureServer.js)
   - `autoPathOption`, `configureServer`
 + 📄 [source/option.js](source/option.js)
