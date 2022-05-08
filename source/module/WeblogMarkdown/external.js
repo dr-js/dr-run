@@ -1,7 +1,7 @@
 import { getRandomId } from '@dr-js/core/module/common/math/random.js'
 import { simpleCompactCSS } from '@dr-js/core/module/common/module/HTML.js'
 
-import Marked from 'marked'
+import { marked as Marked } from 'marked'
 
 import HLJS from 'highlight.js/lib/core'
 import bash from 'highlight.js/lib/languages/bash'
