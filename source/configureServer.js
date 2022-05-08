@@ -6,7 +6,7 @@ import { BASIC_EXTENSION_MAP } from '@dr-js/core/module/common/module/MIME'
 
 import { createDirectory } from '@dr-js/core/module/node/file/Directory'
 import { responderEndWithRedirect } from '@dr-js/core/module/node/server/Responder/Common'
-import { prepareBufferData, responderSendBufferCompress } from '@dr-js/core/module/node/server/Responder/Send'
+import { prepareBufferData, responderSendBuffer, responderSendBufferCompress } from '@dr-js/core/module/node/server/Responder/Send'
 
 import { setupActionMap as setupActionMapStatus, ACTION_CORE_MAP as ACTION_CORE_MAP_STATUS, ACTION_TYPE as ACTION_TYPE_STATUS } from '@dr-js/node/module/module/ActionJSON/status'
 import { setupActionMap as setupActionMapPath, ACTION_CORE_MAP as ACTION_CORE_MAP_PATH } from '@dr-js/node/module/module/ActionJSON/path'
@@ -37,7 +37,8 @@ const PATH_TEMP = 'file/[TEMP]/'
 //       [TEMP]/ (fileUploadMergePath)
 //       [PUBLIC]/ (fileRootPathPublic & weblogRootPath)
 //         index.html
-//         t/*.md
+//         w/*.md
+//         W/*.html
 
 const autoPathOption = ({
   rootPath, // normally just set this
@@ -71,7 +72,7 @@ const configureServer = async ({
 
   webSocketTunnelHost,
 
-  weblogRootPath, weblogRouteIndex, weblogRouteRoot, weblogIndexTitle
+  weblogRootPath, weblogRouteSource, weblogRouteOutput, weblogRouteIndex, weblogIndexTitle
 }) => {
   await createDirectory(fileRootPath)
   await createDirectory(fileRootPathPublic)
@@ -100,7 +101,7 @@ const configureServer = async ({
   const featureActionJSON = fileRootPath && await setupActionJSON({
     loggerExot, routePrefix, featureAuth, featurePermission,
     actionMap: {
-      ...setupActionMapWeblog({ weblogRootPath, weblogRouteIndex, weblogRouteRoot, weblogIndexTitle, loggerExot }),
+      ...setupActionMapWeblog({ weblogRootPath, weblogRouteSource, weblogRouteOutput, weblogRouteIndex, weblogIndexTitle, loggerExot }),
       ...setupActionMapStatus({ rootPath: fileRootPath, loggerExot }),
       ...setupActionMapPath({ rootPath: fileRootPath, loggerExot, actionCoreMap: { ...ACTION_CORE_MAP_PATH, ...ACTION_CORE_MAP_PATH_EXTRA_ARCHIVE } })
     },
@@ -131,7 +132,7 @@ const configureServer = async ({
   })
   const featureWeblog = await setupWeblog({
     loggerExot, routePrefix, featureAuth, featureActionJSON, featureFile,
-    weblogRootPath, weblogRouteIndex, weblogRouteRoot, weblogIndexTitle
+    weblogRootPath, weblogRouteSource, weblogRouteOutput, weblogRouteIndex, weblogIndexTitle
   })
 
   configureFeature({

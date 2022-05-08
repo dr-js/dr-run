@@ -14,6 +14,8 @@ const fromRoot = (...args) => resolve(TEST_ROOT, ...args)
 
 before('prepare', async () => {
   await resetDirectory(TEST_ROOT)
+  await createDirectory(fromRoot(TEST_ROOT, 'w/'))
+  await copyPath(resolve(__dirname, TEST_FILE_NAME), fromRoot(TEST_ROOT, 'w/', TEST_FILE_NAME))
 })
 after('clear', async () => {
   await deleteDirectory(TEST_ROOT)
@@ -21,13 +23,12 @@ after('clear', async () => {
 
 describe('Weblog.Module.Generate', () => {
   it('generateWeblogFromPath()', async () => {
-    await createDirectory(fromRoot(TEST_ROOT, 't'))
-    await copyPath(resolve(__dirname, TEST_FILE_NAME), fromRoot(TEST_ROOT, 't/', TEST_FILE_NAME))
     await generateWeblogFromPath({
       log: (...args) => info('--', ...args),
       weblogRootPath: TEST_ROOT,
+      weblogRouteSource: 'w/',
+      weblogRouteOutput: 'W/',
       weblogRouteIndex: 'index.html',
-      weblogRouteRoot: 't/',
       weblogIndexTitle: 'Dr.Weblog <TEST>'
     })
     info('done')

@@ -10,8 +10,8 @@ const ACTION_TYPE = { // NOTE: should always refer action type form here
 }
 
 const ACTION_CORE_MAP = { // all async
-  [ WEBLOG_GENERATE_MARKDOWN ]: async ({ log, weblogRootPath, weblogRouteIndex, weblogRouteRoot, weblogIndexTitle }) => {
-    const { fileList } = await generateWeblogFromPath({ log, weblogRootPath, weblogRouteIndex, weblogRouteRoot, weblogIndexTitle })
+  [ WEBLOG_GENERATE_MARKDOWN ]: async ({ log, weblogRootPath, weblogRouteIndex, weblogRouteSource, weblogRouteOutput, weblogIndexTitle }) => {
+    const { fileList } = await generateWeblogFromPath({ log, weblogRootPath, weblogRouteSource, weblogRouteOutput, weblogRouteIndex, weblogIndexTitle })
     return { fileList }
   }
 }
@@ -19,12 +19,13 @@ const ACTION_CORE_MAP = { // all async
 const setupActionMap = ({
   actionCoreMap = ACTION_CORE_MAP,
   weblogRootPath,
+  weblogRouteSource,
+  weblogRouteOutput,
   weblogRouteIndex,
-  weblogRouteRoot,
   weblogIndexTitle,
   loggerExot
 }) => {
-  const option = { log: loggerExot.add, weblogRootPath, weblogRouteIndex, weblogRouteRoot, weblogIndexTitle }
+  const option = { log: loggerExot.add, weblogRootPath, weblogRouteIndex, weblogRouteSource, weblogRouteOutput, weblogIndexTitle }
 
   return objectMap(actionCoreMap, (actionFunc, actionType) => async (store, actionPayload) => {
     loggerExot.add(`[ActionBox|${actionType}]`)

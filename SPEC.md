@@ -68,8 +68,9 @@
 >     --websocket-tunnel-host [ARGUMENT=1]
 >         [under DEV] use format: "hostname:port", default hostname: 127.0.0.1
 >     --weblog-root-path [ARGUMENT=1]
+>       --weblog-route-source [ARGUMENT=1]
+>       --weblog-route-output [ARGUMENT=1]
 >       --weblog-route-index [ARGUMENT=1]
->       --weblog-route-root [ARGUMENT=1]
 >       --weblog-index-title [ARGUMENT=1]
 >   --generate-weblog --G -G [OPTIONAL] [ARGUMENT=0-1]
 >       expect "root-path" or "weblog-root-path", load and generate server Weblog & index file
@@ -98,8 +99,9 @@
 >     export DR_RUN_FILE_UPLOAD_MERGE_PATH="[ARGUMENT=1]"
 >     export DR_RUN_WEBSOCKET_TUNNEL_HOST="[ARGUMENT=1]"
 >     export DR_RUN_WEBLOG_ROOT_PATH="[ARGUMENT=1]"
+>     export DR_RUN_WEBLOG_ROUTE_SOURCE="[ARGUMENT=1]"
+>     export DR_RUN_WEBLOG_ROUTE_OUTPUT="[ARGUMENT=1]"
 >     export DR_RUN_WEBLOG_ROUTE_INDEX="[ARGUMENT=1]"
->     export DR_RUN_WEBLOG_ROUTE_ROOT="[ARGUMENT=1]"
 >     export DR_RUN_WEBLOG_INDEX_TITLE="[ARGUMENT=1]"
 >     export DR_RUN_GENERATE_WEBLOG="[OPTIONAL] [ARGUMENT=0-1]"
 >   "
@@ -127,8 +129,9 @@
 >     "fileUploadMergePath": [ "[ARGUMENT=1]" ],
 >     "websocketTunnelHost": [ "[ARGUMENT=1]" ],
 >     "weblogRootPath": [ "[ARGUMENT=1]" ],
+>     "weblogRouteSource": [ "[ARGUMENT=1]" ],
+>     "weblogRouteOutput": [ "[ARGUMENT=1]" ],
 >     "weblogRouteIndex": [ "[ARGUMENT=1]" ],
->     "weblogRouteRoot": [ "[ARGUMENT=1]" ],
 >     "weblogIndexTitle": [ "[ARGUMENT=1]" ],
 >     "generateWeblog": [ "[OPTIONAL] [ARGUMENT=0-1]" ],
 >   }

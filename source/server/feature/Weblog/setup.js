@@ -14,8 +14,9 @@ const setup = async ({
   featureFile: { fileRootPathPublic, URL_FILE_SERVE_PUBLIC_ABBR },
 
   weblogRootPath, // should be the same or under public file serve path
+  weblogRouteSource,
+  weblogRouteOutput,
   weblogRouteIndex,
-  weblogRouteRoot,
   weblogIndexTitle,
 
   URL_HTML = `${routePrefix}/weblog`, // redirect to URL_HTML_INDEX
@@ -39,8 +40,9 @@ const setup = async ({
 
   return {
     weblogRootPath,
+    weblogRouteSource,
+    weblogRouteOutput,
     weblogRouteIndex,
-    weblogRouteRoot,
     weblogIndexTitle,
 
     URL_HTML,
