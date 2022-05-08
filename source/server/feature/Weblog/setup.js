@@ -1,6 +1,6 @@
 import { BASIC_EXTENSION_MAP } from '@dr-js/core/module/common/module/MIME.js'
 import { responderEndWithRedirect } from '@dr-js/core/module/node/server/Responder/Common.js'
-import { responderSendBufferCompress, prepareBufferDataAsync } from '@dr-js/core/module/node/server/Responder/Send.js'
+import { responderSendBufferCompress, prepareBufferData } from '@dr-js/core/module/node/server/Responder/Send.js'
 
 import { ACTION_TYPE as ACTION_TYPE_WEBLOG } from 'source/module/ActionJSON/weblog.js'
 
@@ -28,7 +28,7 @@ const setup = async ({
   if (!actionMap[ ACTION_TYPE_WEBLOG_GENERATE_MARKDOWN ]) throw new Error(`expect ActionJSON provide: ${ACTION_TYPE_WEBLOG_GENERATE_MARKDOWN}`)
   if (!fileRootPathPublic || !weblogRootPath.startsWith(fileRootPathPublic)) throw new Error('expect weblogRootPath under fileRootPathPublic')
 
-  const HTMLBufferData = await prepareBufferDataAsync(Buffer.from(getHTML({
+  const HTMLBufferData = prepareBufferData(Buffer.from(getHTML({
     URL_AUTH_CHECK_ABBR, URL_ACTION_JSON_ABBR,
     ACTION_TYPE_WEBLOG_GENERATE_MARKDOWN
   })), BASIC_EXTENSION_MAP.html)

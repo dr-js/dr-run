@@ -1,5 +1,5 @@
-import { COMMON_LAYOUT, COMMON_STYLE, COMMON_SCRIPT } from '@dr-js/core/module/node/server/commonHTML.js'
-import { DR_BROWSER_SCRIPT_TAG } from '@dr-js/core/module/node/resource.js'
+import { COMMON_LAYOUT, COMMON_STYLE, COMMON_SCRIPT } from '@dr-js/core/module/common/module/HTML.js'
+import { DR_BROWSER_SCRIPT_TAG } from '@dr-js/core/module/node/server/function.js'
 
 import { initModal } from '@dr-js/core/module/node/server/Feature/@/HTML/Modal.js'
 import { initLoadingMask } from '@dr-js/core/module/node/server/Feature/@/HTML/LoadingMask.js'

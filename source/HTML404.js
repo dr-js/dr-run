@@ -1,4 +1,4 @@
-import { COMMON_LAYOUT, COMMON_STYLE } from '@dr-js/core/module/node/server/commonHTML.js'
+import { COMMON_LAYOUT, COMMON_STYLE } from '@dr-js/core/module/common/module/HTML.js'
 import { escapeHTML } from '@dr-js/core/module/common/string.js'
 import { isString } from '@dr-js/core/module/common/check.js'
 

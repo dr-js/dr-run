@@ -3,7 +3,7 @@ import { promises as fsAsync } from 'fs'
 
 import { escapeHTML } from '@dr-js/core/module/common/string.js'
 import { compareString } from '@dr-js/core/module/common/compare.js'
-import { COMMON_LAYOUT, COMMON_STYLE } from '@dr-js/core/module/node/server/commonHTML.js'
+import { COMMON_LAYOUT, COMMON_STYLE } from '@dr-js/core/module/common/module/HTML.js'
 import { PATH_TYPE, toPosixPath } from '@dr-js/core/module/node/fs/Path.js'
 import { getDirInfoList, createDirectory } from '@dr-js/core/module/node/fs/Directory.js'
 import { compressGzBrFileAsync } from '@dr-js/core/module/node/module/Archive/function.js'
