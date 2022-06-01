@@ -1,10 +1,10 @@
-import { resolve, join, basename, extname } from 'path'
-import { promises as fsAsync } from 'fs'
+import { resolve, join, basename, extname } from 'node:path'
 
 import { escapeHTML } from '@dr-js/core/module/common/string.js'
 import { compareString } from '@dr-js/core/module/common/compare.js'
 import { COMMON_LAYOUT, COMMON_STYLE } from '@dr-js/core/module/common/module/HTML.js'
 import { PATH_TYPE, toPosixPath } from '@dr-js/core/module/node/fs/Path.js'
+import { readText, writeText } from '@dr-js/core/module/node/fs/File.js'
 import { getDirInfoList, createDirectory } from '@dr-js/core/module/node/fs/Directory.js'
 import { compressGzBrFileAsync } from '@dr-js/core/module/node/module/Archive/function.js'
 
@@ -87,7 +87,7 @@ const processFile = async (
   file, weblogRouteSource, weblogRouteOutput
 ) => {
   __DEV__ && console.log('[processFile]', file)
-  const markdownString = String(await fsAsync.readFile(file))
+  const markdownString = await readText(file)
   const tokenData = Marked.lexer(markdownString)
   const {
     metaEditFirst, metaEditLogString, metaEditLogFullString,
@@ -186,7 +186,7 @@ const generateWeblogFromPath = async ({
   const outputFile = async (extraPathList = [], extraHeadList = [], extraBodyList = []) => {
     const path = resolve(weblogRootPath, ...extraPathList)
     outputFileList.push(path)
-    return fsAsync.writeFile(path, COMMON_LAYOUT(extraHeadList, extraBodyList))
+    await writeText(path, COMMON_LAYOUT(extraHeadList, extraBodyList))
   }
 
   await createDirectory(resolve(weblogRootPath, weblogRouteSource))

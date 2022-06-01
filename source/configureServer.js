@@ -1,5 +1,5 @@
-import { resolve } from 'path'
-import { gunzipSync } from 'zlib'
+import { resolve } from 'node:path'
+import { gunzipSync } from 'node:zlib'
 
 import { objectPickKey } from '@dr-js/core/module/common/immutable/Object.js'
 import { BASIC_EXTENSION_MAP } from '@dr-js/core/module/common/module/MIME.js'

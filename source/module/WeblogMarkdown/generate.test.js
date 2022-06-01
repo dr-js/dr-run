@@ -1,4 +1,4 @@
-import { resolve } from 'path'
+import { resolve } from 'node:path'
 import { createDirectory, deleteDirectory, resetDirectory } from '@dr-js/core/module/node/fs/Directory.js'
 import { copyPath } from '@dr-js/core/module/node/fs/Path.js'
 

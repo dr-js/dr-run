@@ -1,5 +1,5 @@
-import { tmpdir } from 'os'
-import { resolve } from 'path'
+import { tmpdir } from 'node:os'
+import { resolve } from 'node:path'
 
 import { setupSIGUSR2 } from '@dr-js/core/module/node/module/RuntimeDump.js'
 import { getAuthCommonOption, getAuthSkipOption, getAuthFileOption, getAuthFileGroupOption } from '@dr-js/core/module/node/server/Feature/Auth/option.js'
